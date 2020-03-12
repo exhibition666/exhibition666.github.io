@@ -4,6 +4,27 @@
   
   
   <entry>
+    <title>利用hexo创建博客</title>
+    <link href="/2020/03/12/%E5%88%A9%E7%94%A8hexo%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
+    <url>/2020/03/12/%E5%88%A9%E7%94%A8hexo%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
+    
+    <content type="html"><![CDATA[<p>参考：</p><p><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">hexo官网</a></p><p><a href="https://www.bilibili.com/video/av44544186?t=1622" target="_blank" rel="noopener">手把手教你从0开始搭建自己的个人博客 |无坑版视频教程| hexo</a></p><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>提前安装</p><p>1.安装 <a href="https://nodejs.org/en/" target="_blank" rel="noopener">Node.js</a> (Node.js 版本需不低于 8.10，建议使用 Node.js 10.0 及以上版本)</p><p>2.<a href="http://git-scm.com/" target="_blank" rel="noopener">Git</a></p><h3 id="安装并启动Hexo"><a href="#安装并启动Hexo" class="headerlink" title="安装并启动Hexo"></a>安装并启动Hexo</h3><p><strong>1.全局安装hexo-cli</strong></p><pre><code>npm install -g hexo-cli</code></pre><p>检查是否安装成功</p><pre><code>hexo -v</code></pre><p><strong>2.初始化hexo</strong></p><p>先自己新建一个文件夹，再文件加下打开cmd， 输入命令</p><pre><code>hexo init</code></pre><p><strong>3.启动hexo</strong></p><pre><code>hexo s</code></pre><p>4.<strong>新建博客</strong></p><pre><code>hexo n 博客名称</code></pre><p><strong>5.有改变内容，执行以下指令再启动</strong></p><pre><code>hexo cleanhexo ghexo s</code></pre><h3 id="将博客上传到github上"><a href="#将博客上传到github上" class="headerlink" title="将博客上传到github上"></a>将博客上传到github上</h3><p><strong>1.登录自己的github</strong></p><p><strong>2.创建一个新的仓库，命名如下（必须严格按照此格式）</strong></p><pre><code>用户名.github.io</code></pre><p><strong>3.安装组件</strong></p><pre><code>npm install --save hexo-deployer-git</code></pre><p><strong>4.修改文件夹下_config.yml文件内容</strong></p><blockquote><p>主要修改最后的地方<br><strong>repo后面的为刚才新建的仓库的地址</strong></p><p>deploy:<br>  type: git<br>  repo: <a href="https://github.com/exhibition666/exhibition666.github.io.git" target="_blank" rel="noopener">https://github.com/exhibition666/exhibition666.github.io.git</a><br>  branch: master</p></blockquote><p><strong>5.上传到github</strong></p><pre><code>hexo d</code></pre><p><strong>6.访问地址为：用户名.github.io</strong></p><h3 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h3><p><strong>1.下载主题</strong></p><pre><code>git clone 主题地址 themes/主题名称</code></pre><p><strong>2.修改文件夹下_config.yml文件内容</strong></p><blockquote><p>theme: 主题名称</p></blockquote><h3 id=""><a href="#" class="headerlink" title=""></a></h3>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>hexo</tag>
+      
+      <tag>Hexo Fluid</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>Hello World</title>
     <link href="/2020/03/12/hello-world/"/>
     <url>/2020/03/12/hello-world/</url>
