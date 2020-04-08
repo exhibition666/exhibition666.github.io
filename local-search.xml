@@ -4,6 +4,66 @@
   
   
   <entry>
+    <title>阿里云服务器部署mysql5.7.2版本</title>
+    <link href="/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/"/>
+    <url>/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/</url>
+    
+    <content type="html"><![CDATA[<h2 id="连接与传输"><a href="#连接与传输" class="headerlink" title="连接与传输"></a>连接与传输</h2><p>使用 Xftp 和 Xshell 连接远程服务器和传输文件</p><p>Xftp下载地址：<a href="https://www.netsarang.com/zh/all-downloads/" target="_blank" rel="noopener">https://www.netsarang.com/zh/all-downloads/</a></p><p>Xshell下载地址：<a href="https://www.netsarang.com/zh/all-downloads/" target="_blank" rel="noopener">https://www.netsarang.com/zh/all-downloads/</a></p><p>学校和家庭免费使用：<a href="https://www.netsarang.com/zh/free-for-home-school/" target="_blank" rel="noopener">https://www.netsarang.com/zh/free-for-home-school/</a></p><h2 id="压缩版安装"><a href="#压缩版安装" class="headerlink" title="压缩版安装"></a>压缩版安装</h2><h3 id="查看操作系统版本"><a href="#查看操作系统版本" class="headerlink" title="查看操作系统版本"></a>查看操作系统版本</h3><pre><code># cat /etc/redhat-release</code></pre><h3 id="安装前的环境准备"><a href="#安装前的环境准备" class="headerlink" title="安装前的环境准备"></a>安装前的环境准备</h3><p>查看是否安装过mysql</p><p>首先检测Linux操作系统中是否安装了MySQL：</p><pre><code># rpm -qa | grep -i mysql</code></pre><p>卸载安装包</p><p>如果有信息出现，则进行删除，命令如下：</p><pre><code># rpm -e --nodeps 包名</code></pre><p>删除老版本mysql的开发头文件和库</p><pre><code># rpm -e --nodeps 包名</code></pre><p>注意：卸载后/var/lib/mysql中的数据及/etc/my.cnf不会删除，如果确定没用后就手工删除：</p><pre><code># rm -f /etc/my.cnf# rm -fr /var/lib/mysql</code></pre><p>删除完成后，才能进行安装，否则安装会出错。</p><p>查看旧的mysql安装目录</p><pre><code># whereis mysql</code></pre><p>删除旧的安装目录</p><pre><code># rm -rf 目录</code></pre><p>新建目录</p><pre><code># cd /# mkdir data# cd data/</code></pre><h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><p><strong>安装包准备</strong></p><p>安装前先准备好压缩安装包或者到mysq官网下载即可，将安装报上传至/data/目录下后解压</p><pre><code># cd /data/</code></pre><pre><code># tar -zxvf 安装包 -C /data/</code></pre><p><strong>目录名太长了，重命名为mysql</strong></p><pre><code># mv mysql-5.7.22-linux-glibc2.12-x86_64 mysql</code></pre><p><strong>在mysql下面新建目录data</strong></p><pre><code># cd mysql# mkdir data# ll</code></pre><h3 id="查看mysql用户和组"><a href="#查看mysql用户和组" class="headerlink" title="查看mysql用户和组"></a>查看mysql用户和组</h3><p><strong>查看mysql用户或组是否存在</strong></p><pre><code># id mysql</code></pre><p><strong>如需删除用户和组，执行下列操作</strong></p><pre><code># groupdel mysql# userdel -f mysql不行就进入 vi /etc/grpup 找到mysql 在其前面加上 #</code></pre><h3 id="添加mysql用户组和用户"><a href="#添加mysql用户组和用户" class="headerlink" title="添加mysql用户组和用户"></a><strong>添加mysql用户组和用户</strong></h3><p>添加mysql用户组和用户，并且将mysql用户和mysql组关联</p><p><strong>创建mysql组</strong></p><pre><code># groupadd mysql</code></pre><p><strong>查看是否创建成功</strong></p><pre><code># cat /etc/**group |** grep mysqlmysql:x:500:则表示成功</code></pre><p><strong>创建mysql用户</strong></p><pre><code># useradd -r -g mysql mysql </code></pre><p><strong>查看是否创建成功</strong></p><pre><code># cat /etc/**passwd |** grep mysql</code></pre><p><strong>给mysql用户设置密码</strong></p><pre><code># passwd mysql</code></pre><h3 id="给mysql授权"><a href="#给mysql授权" class="headerlink" title="给mysql授权"></a>给mysql授权</h3><p>给mysql授权,以便能够读写以及执行必要的文件</p><pre><code># chown -R mysql:mysql /data/mysql# chmod -R 775 /data/mysql</code></pre><h3 id="查看有无创建my-default-cnf配置文件"><a href="#查看有无创建my-default-cnf配置文件" class="headerlink" title="查看有无创建my-default.cnf配置文件"></a>查看有无创建my-default.cnf配置文件</h3><p>进入mysql/support-files文件夹的内容，查看是否有my-default.cnf配置文件，如果没有默认的配置文件，需要手动创建一个my-default.cnf配置文件</p><pre><code># cd /data/mysql/support-files/# ll</code></pre><h3 id="my-default-cnf配置文件内容"><a href="#my-default-cnf配置文件内容" class="headerlink" title="my-default.cnf配置文件内容"></a>my-default.cnf配置文件内容</h3><pre><code>#vi my-default.cnf</code></pre><pre><code>[client]port = 3306socket = /tmp/mysql.sock[mysqld]basedir = /data/mysqldatadir = /data/mysql/databind-address = 0.0.0.0port = 3306socket = /tmp/mysql.sockskip-external-lockingkey_buffer_size = 128Mmax_allowed_packet = 1Mtable_open_cache = 256sort_buffer_size = 1Mread_buffer_size = 1Mread_rnd_buffer_size = 2Mmyisam_sort_buffer_size = 8Mthread_cache_size = 8query_cache_size= 16Mmax_connections = 213wait_timeout = 31536000interactive_timeout = 30max_connect_errors = 9long_query_time = 1tmp_table_size = 16M#log-bin=mysql-bin#binlog_format=mixed#server-id = 1lower_case_table_names = 1[mysqldump]quickmax_allowed_packet = 8M[mysql]no-auto-rehash[myisamchk]key_buffer_size = 12Msort_buffer_size = 1Mread_buffer = 1Mwrite_buffer = 1M[mysqlhotcopy]interactive-timeout</code></pre><h3 id="重新授权"><a href="#重新授权" class="headerlink" title="重新授权"></a>重新授权</h3><pre><code># chown -R mysql:mysql /data/mysql# chmod -R 775 /data/mysql</code></pre><h3 id="移动my-default-cnf位置"><a href="#移动my-default-cnf位置" class="headerlink" title="移动my-default.cnf位置"></a>移动my-default.cnf位置</h3><p>复制support-files文件下的my-default.cnf和mysql.server</p><pre><code># cp my-default.cnf /etc/my.cnf# cp mysql.server /etc/init.d/mysqld</code></pre><h3 id="编辑mysqld，修改为mysql的指定路径"><a href="#编辑mysqld，修改为mysql的指定路径" class="headerlink" title="编辑mysqld，修改为mysql的指定路径"></a>编辑mysqld，修改为mysql的指定路径</h3><pre><code># vi /etc/init.d/mysqld</code></pre><p>进入编辑页面，按i 可编辑修改，按ctrl+c停止修改，然后  :wq 保存修改</p><p><img src="/img/2020.4.8/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/1.png" srcset="/img/loading.gif" alt=""></p><h3 id="把mysql路径添加到环境变量中"><a href="#把mysql路径添加到环境变量中" class="headerlink" title="把mysql路径添加到环境变量中"></a>把mysql路径添加到环境变量中</h3><pre><code></code></pre><p>文件末尾添加export MYSQL=/data/mysql，path中加入$MYSQL/bin:</p><p><img src="/img/2020.4.8/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/2.png" srcset="/img/loading.gif" alt=""></p><h3 id="使修改后的profile文件生效"><a href="#使修改后的profile文件生效" class="headerlink" title="使修改后的profile文件生效"></a>使修改后的profile文件生效</h3><pre><code># source /etc/profile</code></pre><h3 id="执行数据库初始化操作"><a href="#执行数据库初始化操作" class="headerlink" title="执行数据库初始化操作"></a>执行数据库初始化操作</h3><p>执行文件为mysql下bin文件夹中mysql_install_db，basedir为安装目录，datadir为数据文件目录。注：mysql_install_db在5.6版本中位于scripts文件夹，5.7已经取消该文件夹，合并到bin下:</p><pre><code>#cd /data/mysql/bin# ./mysqld --basedir=/data/mysql --user=mysql --datadir=/data/mysql/data --initialize</code></pre><p>如果 报error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory<br>就需要 安装libaio</p><pre><code># yum install libaio</code></pre><p>如果报：[ERROR] –initialize specified but the data directory has files in it. Aborting</p><p>说明已经执行过一次，需要把’/data/mysql/data目录删除，重新创建，再授权</p><pre><code>[root@centOS mysql]# cd /data/mysql[root@centOS mysql]# rm -rf data[root@centOS mysql]# mkdir data[root@centOS mysql]# chown -R mysql:mysql /data/mysql[root@centOS mysql]# chmod -R 775 /data/mysql[root@centOS mysql]#</code></pre><p>然后再执行：</p><pre><code>#cd /data/mysql/bin# ./mysqld --basedir=/data/mysql --user=mysql --datadir=/data/mysql/data --initialize</code></pre><h3 id="完成之后，启动mysql服务"><a href="#完成之后，启动mysql服务" class="headerlink" title="完成之后，启动mysql服务"></a>完成之后，启动mysql服务</h3><pre><code># service mysqld start</code></pre><p>此时已经可以启动服务，但整个工程只算完成了一半。<br>注意：新版的可能会报错，因为mysqld_safe的原因，旧版本安装的时候没有报错，只需要把mysqld_safe中的默认路径修改为自己的目标路径，再执行就可以了。</p><h2 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h2><h3 id="首先关闭服务"><a href="#首先关闭服务" class="headerlink" title="首先关闭服务"></a>首先关闭服务</h3><pre><code>#service mysqld stop</code></pre><h3 id="替换路径"><a href="#替换路径" class="headerlink" title="替换路径"></a>替换路径</h3><p>把mysql/bin/mysqld_safe中usr/local/mysql换成指定安装的路径名，然后执行下面代码</p><pre><code># mysqld_safe --user=mysql --skip-grant-tables --skip-networking &amp;</code></pre><h3 id="修改root密码"><a href="#修改root密码" class="headerlink" title="修改root密码"></a>修改root密码</h3><p>此时已经进入免过滤状态，开始修改root密码。注：5.6版本user表中密码字段是password，5.7之后改为authentication_string，不再有password</p><pre><code>[root@ZhOu bin]# mysqlmysql&gt; use mysql;mysql&gt; update user set authentication_string=PASSWORD(&#39;root&#39;) where user=&#39;root&#39;;mysql&gt; flush privileges;mysql&gt; exit;</code></pre><h3 id="再次设置密码"><a href="#再次设置密码" class="headerlink" title="再次设置密码"></a>再次设置密码</h3><p>此时，密码已经修改完成。退出重新登录，本以为搞定了，但是创建数据库，却报错了，错误是：ERROR 1820 (HY000): You must reset your password using ALTER USER statement。原来第一登录，还要再次设置密码,修改之后，创建成功</p><pre><code> # mysql -u root -p mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;root&#39;;mysql&gt; flush privileges;mysql&gt; exit;</code></pre><h2 id="远程登录"><a href="#远程登录" class="headerlink" title="远程登录"></a>远程登录</h2><h3 id="确定mysql端口号"><a href="#确定mysql端口号" class="headerlink" title="确定mysql端口号"></a>确定mysql端口号</h3><pre><code>mysql&gt; show global variables like &#39;port&#39;;</code></pre><p>如果不是3306可进行修改mysql端口号</p><ol><li>vi /etc/my.cnf</li><li>修改 port=3306</li><li>重启 # service mysqld restart</li></ol><h3 id="修改远程连接权限"><a href="#修改远程连接权限" class="headerlink" title="修改远程连接权限"></a>修改远程连接权限</h3><p>很简单，只需要修改user表中root用户的host就可以了。改完之后，记得重启一下服务，再次远程连接</p><pre><code># mysql -uroot -pmysql&gt; use mysql;mysql&gt; update user set host=&#39;%&#39; where user=&#39;root&#39;;mysql&gt; exit;# service mysqld restart</code></pre><h3 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h3><p>如果还连不上报10060 unknown error ,则关闭它</p><pre><code>CentOS7.x 默认的防火墙不是iptables，而是firewalle.查看防火墙状态（关闭后显示not running，开启后显示running）# firewall-cmd --state停止防火墙firewall# systemctl stop firewalld.service禁止防火墙firewall开机启动# systemctl disable firewalld.serviceCentOS6默认的防火墙是iptables1。防火墙即时生效，重启后复原：关闭# service iptables stop开启# service iptables start2。防火墙永久性生效，重启后不会复原关闭：# chkconfig iptables off开启：# chkconfig iptables on</code></pre><h3 id="阿里云添加安全组规则，开放端口号"><a href="#阿里云添加安全组规则，开放端口号" class="headerlink" title="阿里云添加安全组规则，开放端口号"></a>阿里云添加安全组规则，开放端口号</h3><p>官网手册: <a href="https://help.aliyun.com/document_detail/25471.html?spm=5176.100241.0.0.IneJPl" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/25471.html?spm=5176.100241.0.0.IneJPl</a></p><h3 id="设置mysql开机自启动"><a href="#设置mysql开机自启动" class="headerlink" title="设置mysql开机自启动"></a>设置mysql开机自启动</h3><pre><code># chkconfig mysqld on</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>mysql</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>阿里云</tag>
+      
+      <tag>服务器</tag>
+      
+      <tag>mysql</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>阿里云服务器部署后端项目</title>
+    <link href="/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/"/>
+    <url>/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/</url>
+    
+    <content type="html"><![CDATA[<h2 id="购买阿里云服务器"><a href="#购买阿里云服务器" class="headerlink" title="购买阿里云服务器"></a>购买阿里云服务器</h2><p>官方地址：<a href="https://www.aliyun.com/" target="_blank" rel="noopener">https://www.aliyun.com/</a></p><h2 id="打包本地项目"><a href="#打包本地项目" class="headerlink" title="打包本地项目"></a>打包本地项目</h2><p>1.首先在springboot项目中要有此插件</p><pre><code class="xml">&lt;build&gt;    &lt;plugins&gt;        &lt;plugin&gt;            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;        &lt;/plugin&gt;    &lt;/plugins&gt;&lt;/build&gt;</code></pre><p>2.然后再点击右侧的Maven进行打包</p><p><img src="/img/2020.3.31/1.png" srcset="/img/loading.gif" alt="1"></p><p>3.打包完成后，找到打包后文件所在目录</p><p>打开项目所在目录 —&gt; target文件夹 —&gt; 找到jar结尾的文件<img src="/img/2020.3.31/2.png" srcset="/img/loading.gif" alt="2"></p><p>4.测试在本地是否能够正常运行</p><p>在target文件夹下打开cmd，输入命令</p><pre><code class="cmd">java -jar 打包文件的名称</code></pre><h2 id="部署mysql"><a href="#部署mysql" class="headerlink" title="部署mysql"></a>部署mysql</h2><p>详情请参考另一篇文章：<a href="http://localhost:4000/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/" target="_blank" rel="noopener">阿里云部署mysql</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>服务器部署</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>阿里云</tag>
+      
+      <tag>服务器</tag>
+      
+      <tag>mysql</tag>
+      
+      <tag>部署后端项目</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>利用hexo创建博客</title>
     <link href="/2020/03/12/%E5%88%A9%E7%94%A8hexo%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2/"/>
     <url>/2020/03/12/%E5%88%A9%E7%94%A8hexo%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2/</url>
