@@ -256,9 +256,9 @@ interactive-timeout</code></pre><h3 id="重新授权"><a href="#重新授权" cl
 # chmod -R 775 /data/mysql</code></pre><h3 id="移动my-default-cnf位置"><a href="#移动my-default-cnf位置" class="headerlink" title="移动my-default.cnf位置"></a>移动my-default.cnf位置</h3><p>复制support-files文件下的my-default.cnf和mysql.server</p>
 <pre><code># cp my-default.cnf /etc/my.cnf
 # cp mysql.server /etc/init.d/mysqld</code></pre><h3 id="编辑mysqld，修改为mysql的指定路径"><a href="#编辑mysqld，修改为mysql的指定路径" class="headerlink" title="编辑mysqld，修改为mysql的指定路径"></a>编辑mysqld，修改为mysql的指定路径</h3><pre><code># vi /etc/init.d/mysqld</code></pre><p>进入编辑页面，按i 可编辑修改，按ctrl+c停止修改，然后  :wq 保存修改</p>
-<p><img src="/img/2020.4.8/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/1.png" srcset="/img/loading.gif" alt=""></p>
+<p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/1.png" srcset="/img/loading.gif" alt=""></p>
 <h3 id="把mysql路径添加到环境变量中"><a href="#把mysql路径添加到环境变量中" class="headerlink" title="把mysql路径添加到环境变量中"></a>把mysql路径添加到环境变量中</h3><pre><code></code></pre><p>文件末尾添加export MYSQL=/data/mysql，path中加入$MYSQL/bin:</p>
-<p><img src="/img/2020.4.8/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/2.png" srcset="/img/loading.gif" alt=""></p>
+<p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/2.png" srcset="/img/loading.gif" alt=""></p>
 <h3 id="使修改后的profile文件生效"><a href="#使修改后的profile文件生效" class="headerlink" title="使修改后的profile文件生效"></a>使修改后的profile文件生效</h3><pre><code># source /etc/profile</code></pre><h3 id="执行数据库初始化操作"><a href="#执行数据库初始化操作" class="headerlink" title="执行数据库初始化操作"></a>执行数据库初始化操作</h3><p>执行文件为mysql下bin文件夹中mysql_install_db，basedir为安装目录，datadir为数据文件目录。注：mysql_install_db在5.6版本中位于scripts文件夹，5.7已经取消该文件夹，合并到bin下:</p>
 <pre><code>#cd /data/mysql/bin
 # ./mysqld --basedir=/data/mysql --user=mysql --datadir=/data/mysql/data --initialize</code></pre><p>如果 报error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory<br>就需要 安装libaio</p>
@@ -348,6 +348,11 @@ CentOS6默认的防火墙是iptables
               
                 <div class="post-prevnext row">
                   <div class="post-prev col-12 col-md-6">
+                    
+                      <a href="/2020/04/08/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2JDK8/">
+                        <i class="fa fa-chevron-left"></i>
+                        <span>阿里云服务器部署JDK8</span>
+                      </a>
                     
                   </div>
                   <div class="post-next col-12 col-md-6">

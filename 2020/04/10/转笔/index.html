@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>阿里云服务器部署后端项目 - exhibition666</title>
+  <title>转笔 - exhibition666</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -124,7 +124,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期二, 三月 31日 2020, 9:42 晚上
+                  星期五, 四月 10日 2020, 1:23 下午
                 </p>
               
 
@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    301 字
+                    400 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      1 分钟
+                      2 分钟
                   </span>
                 
 
@@ -169,57 +169,98 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <h2 id="购买阿里云服务器"><a href="#购买阿里云服务器" class="headerlink" title="购买阿里云服务器"></a>购买阿里云服务器</h2><p>官方地址：<a href="https://www.aliyun.com/" target="_blank" rel="noopener">https://www.aliyun.com/</a></p>
-<h2 id="打包本地项目"><a href="#打包本地项目" class="headerlink" title="打包本地项目"></a>打包本地项目</h2><p>1.首先在springboot项目中要有此插件</p>
-<pre><code class="xml">&lt;build&gt;
-    &lt;plugins&gt;
-        &lt;plugin&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-        &lt;/plugin&gt;
-    &lt;/plugins&gt;
-&lt;/build&gt;</code></pre>
-<p>2.然后再点击右侧的Maven进行打包</p>
-<p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/1.png" srcset="/img/loading.gif" alt="1"></p>
-<p>3.打包完成后，找到打包后文件所在目录</p>
-<p>打开项目所在目录 —&gt; target文件夹 —&gt; 找到jar结尾的文件<img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/2.png" srcset="/img/loading.gif" alt="2"></p>
-<p>4.测试在本地是否能够正常运行</p>
-<p>在target文件夹下打开cmd，输入命令</p>
-<pre><code class="cmd">java -jar 打包文件的名称</code></pre>
-<h2 id="部署mysql"><a href="#部署mysql" class="headerlink" title="部署mysql"></a>部署mysql</h2><p>详情请参考另一篇文章：<a href="http://localhost:4000/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/" target="_blank" rel="noopener">阿里云部署mysql</a></p>
-<h2 id="部署JDK"><a href="#部署JDK" class="headerlink" title="部署JDK"></a>部署JDK</h2><p>详情请参考另一篇文章：<a href="http://localhost:4000/2020/04/08/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2JDK8/" target="_blank" rel="noopener">阿里云服务器部署JDK8</a></p>
-<h2 id="上传项目"><a href="#上传项目" class="headerlink" title="上传项目"></a>上传项目</h2><p>将上面打包好的项目通过Xftp工具上传到服务器opt目录</p>
-<p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/3.png" srcset="/img/loading.gif" alt="1"></p>
-<h2 id="运行项目"><a href="#运行项目" class="headerlink" title="运行项目"></a>运行项目</h2><pre><code>java -jar 项目的jar文件</code></pre><p><strong>通过浏览器进行访问，如果访问不了，应该是没有开放相应的端口，通过阿里云的安全组实例打开相应的端口号</strong></p>
-<p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/4.png" srcset="/img/loading.gif" alt="1"></p>
-<p>至此，阿里云服务器部署后端项目成功！！！</p>
+              <h3 id="Level-1"><a href="#Level-1" class="headerlink" title="Level 1"></a>Level 1</h3><p>Charge Normal 1.0</p>
+<p>Charge Reverse  1.0</p>
+<p>Fingerpass Normal 0.5</p>
+<p>Fingerpass Reverse 0.5</p>
+<p>Sonic Normal 1.0</p>
+<p>Sonic Reserve 1.0</p>
+<p>Wiper Harmonic 0.5</p>
+<p>Figure 8 1.0</p>
+<p>ThumbAround Reverse 1.0</p>
+<p>Index Back Around 1.5</p>
+<h3 id="Level-2"><a href="#Level-2" class="headerlink" title="Level 2"></a>Level 2</h3><p>Triangle Pass Normal 1.0</p>
+<p>Triangle Pass Reverse 1.0</p>
+<p>Twist Sonic Normal 1.0</p>
+<p>[先修：Fingerpass Reverse, Charge Normal]</p>
+<p>Twist Sonic Reverse 1.0</p>
+<p>[先修：Fingerpass Normal, Charge Reverse]</p>
+<p>Warped Sonic Normal 1.5</p>
+<p>[先修：Charge Normal, Fingerpass Normal]</p>
+<p>Sonic 2* Normal 1.0</p>
+<p>[先修： Charge Normal, Fingerpass Normal]</p>
+<p>Infinify Normal 1.0</p>
+<p>[先修：Wiper Harmonic, Figure 8]</p>
+<p>Single ExtendedInfinityNormal 1.5</p>
+<p>[先修：Infinity Normal]</p>
+<p>Back Tap 2.0</p>
+<p>[先修：Index BackAround]</p>
+<p>Index Around Normal 2.o</p>
+<p>[先修：Thumbaround Normal]</p>
+<p>Cardiod Normal 1.5</p>
+<p>[先修：Thumbaround Normal]</p>
+<h3 id="Level-3"><a href="#Level-3" class="headerlink" title="Level 3"></a>Level 3</h3><p>Warped Sonic Reverse 1.5</p>
+<p>[先修：Fingerpass Reverse, Charge Reverse]</p>
+<p>Inverse Sonic Normal 2.0</p>
+<p>[先修：Sonic Normal]</p>
+<p>Sonic 2* Reverse 2.0</p>
+<p>[先修：Sonic Reverse]</p>
+<p>Demon Sonic 1.5</p>
+<p>[先修：Sonic Normal, Twist Sonic Normal]</p>
+<p>Infinify Reverse 1.0</p>
+<p>[先修： Figure 8, Wiper Harmonic]</p>
+<p>Single Extended Infinity Reverse 1.5</p>
+<p>[先修：Infinify Reverse]</p>
+<p>X-Tap 2.0</p>
+<p>[先修：Twist Sonic Normal]</p>
+<p>Middle Around Normal 2.5</p>
+<p>[先修：Index Around Normal]</p>
+<p>Korean Extended Thumbaround Normal 2.5</p>
+<p>[先修：Fingerless Index Around Normal, Thumbaround Normal]</p>
+<p>Fingerless Thumbaround Normal 1.5</p>
+<p>[先修：Thumbaround Normal]</p>
+<p>Fingerless Thumbaround Reverse 1.5</p>
+<p>[先修：Index Around Normal]</p>
+<p>Fingerless Index Around Normal 2.0</p>
+<p>[先修：Index Around Normal]</p>
+<p>Meophyte Sonic Normal 1.0</p>
+<p>[先修：Sonic Normal]</p>
+<h3 id="Level-4"><a href="#Level-4" class="headerlink" title="Level 4"></a>Level 4</h3><p>Flick 1.5</p>
+<p>Index Spin Normal 2.0</p>
+<p>[先修：Index Around Normal]</p>
+<p>Back Spin Normal 2.5</p>
+<p>[先修：Index Back Around]</p>
+<p>Middle Around Reverse 2.5</p>
+<p>[先修：Middle Around Normal]</p>
+<p>Fingerless Korean Extended ThumbAround Normal 2.5</p>
+<p>[先修：Korean Extended ThumbAround Normal]</p>
+<p>Socissor’s Spin 2.0</p>
+<p>[先修：Twist Sonic Normal]</p>
+<p>Neophyte Back Around 2.0</p>
+<p>[先修：Index Back Around]</p>
+<p>Korean Fingerless Thumbaround Reverse 1.5</p>
+<p>[先修：Fingerless Thumbaround Reverse]</p>
+<p>Shadow Normal 3.0</p>
+<p>[先修：charge Normal]</p>
+<p>Thumb Spin Normal 2.5</p>
+<p>[先修：Thumbaround Normal]</p>
+<p>Thumb Spin Reverse 2.5</p>
+<p>[先修：Thumbaround Reverse]</p>
+<p>Middle Back Around 3.0</p>
+<p>[先修：Index Back Around]</p>
+<p>Extended ThumbAround Reverse 3.0</p>
+<p>[先修：Index Back Around, Fingerless Thumbaround Reverse]</p>
 
             </div>
             <hr>
             <div>
               <p>
                 
-                  <span>
-                <i class="iconfont icon-inbox"></i>
-                    
-                      <a class="hover-with-bg" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2/">服务器部署</a>
-                      &nbsp;
-                    
-                  </span>&nbsp;&nbsp;
-                
                 
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/">阿里云</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</a>
-                    
-                      <a class="hover-with-bg" href="/tags/mysql/">mysql</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/">部署后端项目</a>
-                    
-                      <a class="hover-with-bg" href="/tags/JDK/">JDK</a>
+                      <a class="hover-with-bg" href="/tags/%E8%BD%AC%E7%AC%94/">转笔</a>
                     
                   </span>
                 
@@ -231,16 +272,16 @@
                 <div class="post-prevnext row">
                   <div class="post-prev col-12 col-md-6">
                     
-                      <a href="/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/">
+                      <a href="/2020/04/10/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE/">
                         <i class="fa fa-chevron-left"></i>
-                        <span>阿里云服务器部署mysql5.7.2版本</span>
+                        <span>阿里云服务器部署前端项目</span>
                       </a>
                     
                   </div>
                   <div class="post-next col-12 col-md-6">
                     
-                      <a href="/2020/03/12/%E5%88%A9%E7%94%A8hexo%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
-                        <span>利用hexo创建博客</span>
+                      <a href="/2020/04/10/%E4%B9%A6%E7%AD%BE/">
+                        <span>书签</span>
                         <i class="fa fa-chevron-right"></i>
                       </a>
                     
@@ -411,7 +452,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "阿里云服务器部署后端项目&nbsp;",
+        "转笔&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,

@@ -4,11 +4,252 @@
   
   
   <entry>
+    <title>Springboot整合swagger</title>
+    <link href="/2020/04/14/Springboot%E6%95%B4%E5%90%88swagger/"/>
+    <url>/2020/04/14/Springboot%E6%95%B4%E5%90%88swagger/</url>
+    
+    <content type="html"><![CDATA[<h4 id="转载"><a href="#转载" class="headerlink" title="转载"></a>转载</h4><p><strong>转载自<a href="https://blog.csdn.net/u012702547/article/details/88775298" target="_blank" rel="noopener">https://blog.csdn.net/u012702547/article/details/88775298</a></strong></p><h4 id="1-工程创建"><a href="#1-工程创建" class="headerlink" title="1.工程创建"></a>1.工程创建</h4><p>导入依赖</p><pre><code class="xml">&lt;dependency&gt;    &lt;groupId&gt;io.springfox&lt;/groupId&gt;    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;    &lt;version&gt;2.9.2&lt;/version&gt;&lt;/dependency&gt;&lt;dependency&gt;    &lt;groupId&gt;io.springfox&lt;/groupId&gt;    &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;    &lt;version&gt;2.9.2&lt;/version&gt;&lt;/dependency&gt;&lt;dependency&gt;    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;&lt;/dependency&gt;</code></pre><h4 id="2-Swagger2配置"><a href="#2-Swagger2配置" class="headerlink" title="2.Swagger2配置"></a>2.Swagger2配置</h4><p>Swagger2的配置也是比较容易的，在项目创建成功之后，只需要开发者自己提供一个Docket的Bean即可，如下：</p><pre><code>@Configuration@EnableSwagger2public class SwaggerConfig {    @Bean    public Docket createRestApi() {        return new Docket(DocumentationType.SWAGGER_2)                .pathMapping(&quot;/&quot;)                .select()                .apis(RequestHandlerSelectors.basePackage(&quot;com.nvn.controller&quot;))                .paths(PathSelectors.any())                .build().apiInfo(new ApiInfoBuilder()                        //标题                        .title(&quot;SpringBoot整合Swagger&quot;)                        //描述                        .description(&quot;SpringBoot整合Swagger，详细信息......&quot;)                        //版本                        .version(&quot;9.0&quot;)                        .contact(new Contact(&quot;啊啊啊啊&quot;,&quot;blog.csdn.net&quot;,&quot;aaa@gmail.com&quot;))                        //网页                        .license(&quot;The Apache License&quot;)                        .licenseUrl(&quot;http://www.baidu.com&quot;)                        .build());    }}</code></pre><p>这里提供一个配置类，首先通过@EnableSwagger2注解启用Swagger2，然后配置一个Docket Bean，这个Bean中，配置映射路径和要扫描的接口的位置，在apiInfo中，主要配置一下Swagger2文档网站的信息，例如网站的title，网站的描述，联系人的信息，使用的协议等等。</p><h4 id="3-创建接口"><a href="#3-创建接口" class="headerlink" title="3.创建接口"></a>3.创建接口</h4><p>接下来就是创建接口了，Swagger2相关的注解其实并不多，而且很容易懂，下面我来分别向小伙伴们举例说明：</p><pre><code class="java">@PostMapping(&quot;/&quot;)    @ApiOperation(&quot;添加用户的接口&quot;)    @ApiImplicitParams({            @ApiImplicitParam(name = &quot;username&quot;, value = &quot;用户名&quot;, defaultValue = &quot;李四&quot;),            @ApiImplicitParam(name = &quot;address&quot;, value = &quot;用户地址&quot;, defaultValue = &quot;深圳&quot;, required = true)    }    )    public RespBean addUser(String username, @RequestParam(required = true) String address) {        return new RespBean();    }</code></pre><p>这里边涉及到多个API，我来向小伙伴们分别说明：</p><p>1.@Api注解可以用来标记当前Controller的功能。<br>2.@ApiOperation注解用来标记一个方法的作用。<br>3.@ApiImplicitParam注解用来描述一个参数，可以配置参数的中文含义，也可以给参数设置默认值，这样在接口测试的时候可以避免手动输入。<br>如果有多个参数，则需要使用多个@ApiImplicitParam注解来描述，多个@ApiImplicitParam注解需要放在一个@ApiImplicitParams注解中。<br>需要注意的是，@ApiImplicitParam注解中虽然可以指定参数是必填的，但是却不能代替5.@RequestParam(required = true)，前者的必填只是在Swagger2框架内必填，抛弃了Swagger2，这个限制就没用了，所以假如开发者需要指定一个参数必填，@RequestParam(required = true)注解还是不能省略。<br>6.如果参数是一个对象（例如上文的更新接口），对于参数的描述也可以放在实体类中。例如下面一段代码：</p><pre><code>@ApiModelpublic class User {    @ApiModelProperty(value = &quot;用户id&quot;)    private Integer id;    @ApiModelProperty(value = &quot;用户名&quot;)    private String username;    @ApiModelProperty(value = &quot;用户地址&quot;)    private String address;    //getter/setter}</code></pre><h4 id="4-访问"><a href="#4-访问" class="headerlink" title="4.访问"></a>4.访问</h4><p><a href="http://localhost:8080/swagger-ui.html" target="_blank" rel="noopener">http://localhost:8080/swagger-ui.html</a></p><h4 id="5-出现的问题"><a href="#5-出现的问题" class="headerlink" title="5.出现的问题"></a>5.出现的问题</h4><p>1.SpringBoot2.x添加拦截器后Swagger无法访问</p><p><a href="https://blog.csdn.net/Strugglein/article/details/82755039" target="_blank" rel="noopener">https://blog.csdn.net/Strugglein/article/details/82755039</a></p><h4 id="6-swagger2注解详细说明"><a href="#6-swagger2注解详细说明" class="headerlink" title="6.swagger2注解详细说明"></a>6.swagger2注解详细说明</h4><p><a href="https://blog.csdn.net/qq_28009065/article/details/79104103" target="_blank" rel="noopener">https://blog.csdn.net/qq_28009065/article/details/79104103</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>swagger</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Springboot</tag>
+      
+      <tag>swagger</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>CMD常用命令</title>
+    <link href="/2020/04/11/CMD%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/"/>
+    <url>/2020/04/11/CMD%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    
+    <content type="html"><![CDATA[<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="1-列出所有任务及进程号"><a href="#1-列出所有任务及进程号" class="headerlink" title="1.列出所有任务及进程号"></a>1.列出所有任务及进程号</h3><pre><code>tasklist</code></pre><h3 id="2-查看网络连接状态"><a href="#2-查看网络连接状态" class="headerlink" title="2.查看网络连接状态"></a>2.查看网络连接状态</h3><pre><code>netstat -ano //查看网络连接、状态以及对应的进程id</code></pre><h3 id="3-查看系统信息"><a href="#3-查看系统信息" class="headerlink" title="3.查看系统信息"></a>3.查看系统信息</h3><pre><code>1. 输入sysdm.cpl，系统属性2. 输入dxdiag3. 输入 start msinfo32，winmsd系统信息4. 输入 devmgmt.msc，设备管理：5. 输入 taskmgr （或按Ctrl+Alt+Esc） 在性能选项卡看物理内存和pagefile6. 输入 winver 也可以查看内存大小</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>CMD</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>CMD</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Linux常用命令</title>
+    <link href="/2020/04/11/Linux%E5%AD%A6%E4%B9%A0/"/>
+    <url>/2020/04/11/Linux%E5%AD%A6%E4%B9%A0/</url>
+    
+    <content type="html"><![CDATA[<p><strong>一句经典的话：在Linux世界里，一切皆文件</strong></p><h3 id="基础操作"><a href="#基础操作" class="headerlink" title="基础操作"></a>基础操作</h3><h4 id="关机-amp-重启"><a href="#关机-amp-重启" class="headerlink" title="关机&amp;重启"></a>关机&amp;重启</h4><pre><code>shutdown    shutdown -h now: 立即关机    shutdown -h 1: 1分钟后关机    shutdown -r now: 立即重启halt    直接使用，等价于关机reboot    重启系统sync    把内存的数据同步到磁盘</code></pre><p><strong>当我们关机或者重启时，都应该先执行sync指令，把内存的数据写入磁盘，防止数据丢失</strong></p><h3 id="vi和vim编辑器"><a href="#vi和vim编辑器" class="headerlink" title="vi和vim编辑器"></a>vi和vim编辑器</h3><p>vi和vim三种模式的转化图</p><p><img src="/img/article/Linux%E5%AD%A6%E4%B9%A0/1.png" srcset="/img/loading.gif" alt=""></p><h3 id="用户管理"><a href="#用户管理" class="headerlink" title="用户管理"></a>用户管理</h3><h4 id="添加用户"><a href="#添加用户" class="headerlink" title="添加用户"></a>添加用户</h4><pre><code>useradd [选项] 用户名创建成功后，会自动创建和用户同名的家目录useradd -d 指定目录 新的用户名给新创建的用户指定家目录</code></pre><h4 id="给用户指定或者修改密码"><a href="#给用户指定或者修改密码" class="headerlink" title="给用户指定或者修改密码"></a>给用户指定或者修改密码</h4><pre><code>passwd 用户名</code></pre><h4 id="删除用户"><a href="#删除用户" class="headerlink" title="删除用户"></a>删除用户</h4><pre><code>//删除用户，保留家目录userdel 用户名//删除用户及其用户主目录userdel -r xq</code></pre><h4 id="查询用户信息"><a href="#查询用户信息" class="headerlink" title="查询用户信息"></a>查询用户信息</h4><pre><code>id 用户名</code></pre><h4 id="切换用户"><a href="#切换用户" class="headerlink" title="切换用户"></a>切换用户</h4><pre><code>su - 用户名需要返回原来用户，使用exit指令</code></pre><h4 id="增加组"><a href="#增加组" class="headerlink" title="增加组"></a>增加组</h4><pre><code>groupadd 组名</code></pre><h4 id="删除组"><a href="#删除组" class="headerlink" title="删除组"></a>删除组</h4><pre><code>groupdel 组名</code></pre><h4 id="增加用户时直接加上组"><a href="#增加用户时直接加上组" class="headerlink" title="增加用户时直接加上组"></a>增加用户时直接加上组</h4><pre><code>useradd -g 用户组 用户名</code></pre><h4 id="修改用户的组"><a href="#修改用户的组" class="headerlink" title="修改用户的组"></a>修改用户的组</h4><pre><code>usermod -g 用户组 用户名</code></pre><h4 id="etc-passwd-文件"><a href="#etc-passwd-文件" class="headerlink" title="/etc/passwd 文件"></a>/etc/passwd 文件</h4><pre><code>用户(user)的配置文件，记录用户的各种信息每行的含义： 用户名:命令:用户标识号:组标识号:注释性描述:主目录:登录Shell</code></pre><h4 id="etc-shadow-文件"><a href="#etc-shadow-文件" class="headerlink" title="/etc/shadow 文件"></a>/etc/shadow 文件</h4><pre><code>口令的配置文件每行的含义: 登录名:加密口令:最后一次修改时间:最小时间间隔:最大时间间隔:警告时间:不活动时间:失效时间:标志</code></pre><h4 id="etc-group-文件"><a href="#etc-group-文件" class="headerlink" title="/etc/group 文件"></a>/etc/group 文件</h4><pre><code>组(group)的配置文件，记录Linux包含的组的信息每行含义：组名:命令:组标识号:组内用户列表</code></pre><h3 id="帮助指令"><a href="#帮助指令" class="headerlink" title="帮助指令"></a>帮助指令</h3><h4 id="man"><a href="#man" class="headerlink" title="man"></a>man</h4><pre><code>man [命令或配置文件] (功能描述：获得帮助信息)</code></pre><h4 id="help"><a href="#help" class="headerlink" title="help"></a>help</h4><pre><code>help 命令 (功能描述：获得shell内置命令的帮助信息)</code></pre><h3 id="文件目录类指令"><a href="#文件目录类指令" class="headerlink" title="文件目录类指令"></a>文件目录类指令</h3><h4 id="pwd"><a href="#pwd" class="headerlink" title="pwd"></a>pwd</h4><pre><code>pwd (功能描述：显示当前工作目录的绝对路径)</code></pre><h4 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h4><pre><code>ls [选项] [目录或是文件]常用选项：    -a: 显示当前目录所有的文件和目录，包括隐藏的    -l: 以列表的方式显示信息</code></pre><h4 id="cd"><a href="#cd" class="headerlink" title="cd"></a>cd</h4><pre><code>cd [参数] (功能描述：切换到指定目录)cd ~ 或 cd : 回到自己的家目录cd .. 回到当前目录的上一级目录</code></pre><h4 id="mkdir"><a href="#mkdir" class="headerlink" title="mkdir"></a>mkdir</h4><pre><code>mkdir [选项] 要创建的目录常用选项：    -p: 创建多级目录</code></pre><h4 id="rmdir"><a href="#rmdir" class="headerlink" title="rmdir"></a>rmdir</h4><pre><code>//删除空目录rmdir [选项] 要删除的空目录//如果要删除非空目录rm -rf 要删除的目录</code></pre><h4 id="touch"><a href="#touch" class="headerlink" title="touch"></a>touch</h4><pre><code>//创建空文件touch 文件名称</code></pre><h4 id="cp-重要"><a href="#cp-重要" class="headerlink" title="cp[重要]"></a>cp[重要]</h4><pre><code>//拷贝文件到指定目录cp [选项] source dest常用选项:    -r: 递归复制整个文件夹</code></pre><h4 id="rm"><a href="#rm" class="headerlink" title="rm"></a>rm</h4><pre><code>//移除[删除]文件或目录rm [选项] 要删除的文件或目录常用选项：    -r: 递归删除整个文件夹    -f: 强制删除不提示</code></pre><h4 id="mv"><a href="#mv" class="headerlink" title="mv"></a>mv</h4><pre><code>//移动文件与目录或重命名mv oldNameFile newNameFile (功能描述：重命名)mv /temp/movefile /targetFolder (功能描述：移动文件)</code></pre><h4 id="cat"><a href="#cat" class="headerlink" title="cat"></a>cat</h4><pre><code>//查看文件内容，以只读方式打开cat [选项] 查看的文件常用选项:    -n: 显示行号//分页显示cat 文件名 | more[分页浏览]</code></pre><h4 id="more"><a href="#more" class="headerlink" title="more"></a>more</h4><pre><code></code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>Linux</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>Linux</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>阿里云服务器部署nignx</title>
+    <link href="/2020/04/10/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2nignx/"/>
+    <url>/2020/04/10/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2nignx/</url>
+    
+    <content type="html"><![CDATA[<p>参考：<a href="https://www.cnblogs.com/xxoome/p/5866475.html" target="_blank" rel="noopener">https://www.cnblogs.com/xxoome/p/5866475.html</a></p><h3 id="上传软件到服务器"><a href="#上传软件到服务器" class="headerlink" title="上传软件到服务器"></a>上传软件到服务器</h3><p><strong>在opt文件夹下创建soft文件夹</strong></p><p><strong>上传nginx压缩包至服务器上, 上传到soft文件夹下</strong></p><p>nginx下载地址 ：<a href="http://nginx.org/en/download.html" target="_blank" rel="noopener">http://nginx.org/en/download.html</a></p><p>Xftp下载地址：<a href="https://www.netsarang.com/zh/all-downloads/" target="_blank" rel="noopener">https://www.netsarang.com/zh/all-downloads/</a></p><p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE/1.png" srcset="/img/loading.gif" alt="1"></p><h3 id="查看安装"><a href="#查看安装" class="headerlink" title="查看安装"></a>查看安装</h3><p>1、rpm包安装的，可以用 rpm -qa 看到，如果要查找某软件包是否安装，用 <strong>rpm -qa | grep “软件或者包的名字”</strong></p><p>2、以deb包安装的，可以用 dpkg -l 看到。如果是查找指定软件包，用 <strong>dpkg -l | grep “软件或者包的名字”</strong></p><p>3、yum方法安装的，可以用 yum list installed 查找，如果是查找指定包，用 <strong>yum list installed | grep “软件名或者包名”</strong></p><p>在安装nginx前首先要确认系统中安装了<strong>gcc、pcre-devel、zlib-devel、openssl-devel</strong>。</p><p><strong>查看是否安装了gcc</strong></p><pre><code>yum list installed | grep &quot;gcc&quot;</code></pre><p>如果没有安装，就进行安装</p><h3 id="安装nginx相关依赖包"><a href="#安装nginx相关依赖包" class="headerlink" title="安装nginx相关依赖包"></a>安装nginx相关依赖包</h3><blockquote><p>安装有提示输入，直接输入y按回车即可</p></blockquote><p><strong>安装gcc，编译nginx</strong></p><pre><code>yum install gcc-c++</code></pre><p><strong>安装pcre，nginx使用它解析正则表达式</strong></p><pre><code>yum install -y pcre pcre-devel</code></pre><p><strong>安装zlib，提供了很多种压缩和解压方式，nginx使用它对http包内容进行解压</strong></p><pre><code>yum install -y zlib zlib-devel</code></pre><p><strong>安装openssl，nginx支持http和https协议需要依赖它</strong></p><pre><code>yum install -y openssl openssl-devel</code></pre><h3 id="解压安装nginx"><a href="#解压安装nginx" class="headerlink" title="解压安装nginx"></a>解压安装nginx</h3><pre><code>进入目录# cd /opt/soft解压# tar -zxvf nginx压宿包名称进入nginx目录# cd nginx文件夹名称/配置# ./configure \--prefix=/usr/local/nginx \--with-http_stub_status_module --with-http_ssl_module安装make &amp;&amp; make install</code></pre><h3 id="测试安装情况"><a href="#测试安装情况" class="headerlink" title="测试安装情况"></a>测试安装情况</h3><pre><code>进入目录# cd /usr/local/nginx/sbinsbin下有一个nginx文件启动# ./nginx</code></pre><h3 id="nginx运行相关指令"><a href="#nginx运行相关指令" class="headerlink" title="nginx运行相关指令"></a>nginx运行相关指令</h3><p><strong>启动nginx</strong></p><pre><code>./nignx</code></pre><p><strong>查看启动的nginx进程</strong></p><pre><code>ps -ef|grep nginx</code></pre><p>如图所示，即正在运行</p><p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE/1.png" srcset="/img/loading.gif" alt="2"></p><p><strong>结束进程</strong></p><pre><code>kill -9 进程号1 [进程号2 进程号3 ...]</code></pre><p><strong>检查nginx语法是否正确</strong></p><pre><code>./nginx -t</code></pre><p><strong>重新加载配置|重启|退出(正常关闭)|停止(强制关闭)</strong></p><pre><code>./nginx -s reload|reopen|quit|stop</code></pre><h3 id="验证运行情况"><a href="#验证运行情况" class="headerlink" title="验证运行情况"></a>验证运行情况</h3><pre><code>curl localhost:80</code></pre><p>通过浏览器浏览也行</p><h3 id="配置nginx-conf"><a href="#配置nginx-conf" class="headerlink" title="配置nginx.conf"></a>配置nginx.conf</h3><p>在目录 /usr/local/nginx/conf 下找到nginx.conf文件，复制到本地进行配置</p><pre><code>#user  nobody;# 启动的进程数量worker_processes  1;#error_log  logs/error.log;#error_log  logs/error.log  notice;#error_log  logs/error.log  info;#pid        logs/nginx.pid;events {    # 单个进程的并发量     worker_connections  1024; # 总并发量=单个进程的并发量*启动的进程数量}http {    include       mime.types;    default_type  application/octet-stream;    #log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;    #                  &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;    #                  &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;    #access_log  logs/access.log  main;    sendfile        on;    #tcp_nopush     on;    #keepalive_timeout  0;    keepalive_timeout  65; # 连接服务器超时时长，65秒    #gzip  on;    server { # 一个虚拟主机配置, 多个虚拟机就配置多个server        listen       8001;        server_name  localhost; # 域名解析        #charset koi8-r;        #access_log  logs/host.access.log  main;        location / { # 配置默认访问页            #root   html;            root   /usr/local/nginx/html/dist; # 项目目录            index  index.html index.htm; #首页        }        #error_page  404              /404.html;        # redirect server error pages to the static page /50x.html        #        error_page   500 502 503 504  /50x.html;        location = /50x.html {            # 代理转发到后台服务接口            root   html;        }        # proxy the PHP scripts to Apache listening on 127.0.0.1:80        #        #location ~ \.php$ {        #    proxy_pass   http://127.0.0.1;        #}        # pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000        #        #location ~ \.php$ {        #    root           html;        #    fastcgi_pass   127.0.0.1:9000;        #    fastcgi_index  index.php;        #    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;        #    include        fastcgi_params;        #}        # deny access to .htaccess files, if Apache&#39;s document root        # concurs with nginx&#39;s one        #        #location ~ /\.ht {        #    deny  all;        #}    }    # another virtual host using mix of IP-, name-, and port-based configuration    #    #server {    #    listen       8000;    #    listen       somename:8080;    #    server_name  somename  alias  another.alias;    #    location / {    #        root   html;    #        index  index.html index.htm;    #    }    #}    # HTTPS server    #    #server {    #    listen       443 ssl;    #    server_name  localhost;    #    ssl_certificate      cert.pem;    #    ssl_certificate_key  cert.key;    #    ssl_session_cache    shared:SSL:1m;    #    ssl_session_timeout  5m;    #    ssl_ciphers  HIGH:!aNULL:!MD5;    #    ssl_prefer_server_ciphers  on;    #    location / {    #        root   html;    #        index  index.html index.htm;    #    }    #}}</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>nginx</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>阿里云</tag>
+      
+      <tag>服务器</tag>
+      
+      <tag>部署前端项目</tag>
+      
+      <tag>nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>阿里云服务器部署前端项目</title>
+    <link href="/2020/04/10/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE/"/>
+    <url>/2020/04/10/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE/</url>
+    
+    <content type="html"><![CDATA[<h2 id="购买阿里云服务器"><a href="#购买阿里云服务器" class="headerlink" title="购买阿里云服务器"></a>购买阿里云服务器</h2><p>官方地址：<a href="https://www.aliyun.com/" target="_blank" rel="noopener">https://www.aliyun.com/</a></p><h2 id="测试项目本地运行"><a href="#测试项目本地运行" class="headerlink" title="测试项目本地运行"></a>测试项目本地运行</h2><p>在本地运行项目，查看是否运行成功</p><h2 id="打包项目"><a href="#打包项目" class="headerlink" title="打包项目"></a>打包项目</h2><pre><code>npm run build</code></pre><p>将打包好的项目dist重命名</p><h2 id="安装nginx"><a href="#安装nginx" class="headerlink" title="安装nginx"></a>安装nginx</h2><p>查看另一篇文章：<a href="http://localhost:4000/2020/04/10/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2nignx/" target="_blank" rel="noopener">阿里云服务器部署nignx</a></p><h2 id="上传项目"><a href="#上传项目" class="headerlink" title="上传项目"></a>上传项目</h2><p>将之前打包好的项目上传到 /user/local/nginx/html 目录下，即可通过特定端口进行访问</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>服务器部署</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>阿里云</tag>
+      
+      <tag>服务器</tag>
+      
+      <tag>部署前端项目</tag>
+      
+      <tag>vue</tag>
+      
+      <tag>nginx</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>转笔</title>
+    <link href="/2020/04/10/%E8%BD%AC%E7%AC%94/"/>
+    <url>/2020/04/10/%E8%BD%AC%E7%AC%94/</url>
+    
+    <content type="html"><![CDATA[<h3 id="Level-1"><a href="#Level-1" class="headerlink" title="Level 1"></a>Level 1</h3><p>Charge Normal 1.0</p><p>Charge Reverse  1.0</p><p>Fingerpass Normal 0.5</p><p>Fingerpass Reverse 0.5</p><p>Sonic Normal 1.0</p><p>Sonic Reserve 1.0</p><p>Wiper Harmonic 0.5</p><p>Figure 8 1.0</p><p>ThumbAround Reverse 1.0</p><p>Index Back Around 1.5</p><h3 id="Level-2"><a href="#Level-2" class="headerlink" title="Level 2"></a>Level 2</h3><p>Triangle Pass Normal 1.0</p><p>Triangle Pass Reverse 1.0</p><p>Twist Sonic Normal 1.0</p><p>[先修：Fingerpass Reverse, Charge Normal]</p><p>Twist Sonic Reverse 1.0</p><p>[先修：Fingerpass Normal, Charge Reverse]</p><p>Warped Sonic Normal 1.5</p><p>[先修：Charge Normal, Fingerpass Normal]</p><p>Sonic 2* Normal 1.0</p><p>[先修： Charge Normal, Fingerpass Normal]</p><p>Infinify Normal 1.0</p><p>[先修：Wiper Harmonic, Figure 8]</p><p>Single ExtendedInfinityNormal 1.5</p><p>[先修：Infinity Normal]</p><p>Back Tap 2.0</p><p>[先修：Index BackAround]</p><p>Index Around Normal 2.o</p><p>[先修：Thumbaround Normal]</p><p>Cardiod Normal 1.5</p><p>[先修：Thumbaround Normal]</p><h3 id="Level-3"><a href="#Level-3" class="headerlink" title="Level 3"></a>Level 3</h3><p>Warped Sonic Reverse 1.5</p><p>[先修：Fingerpass Reverse, Charge Reverse]</p><p>Inverse Sonic Normal 2.0</p><p>[先修：Sonic Normal]</p><p>Sonic 2* Reverse 2.0</p><p>[先修：Sonic Reverse]</p><p>Demon Sonic 1.5</p><p>[先修：Sonic Normal, Twist Sonic Normal]</p><p>Infinify Reverse 1.0</p><p>[先修： Figure 8, Wiper Harmonic]</p><p>Single Extended Infinity Reverse 1.5</p><p>[先修：Infinify Reverse]</p><p>X-Tap 2.0</p><p>[先修：Twist Sonic Normal]</p><p>Middle Around Normal 2.5</p><p>[先修：Index Around Normal]</p><p>Korean Extended Thumbaround Normal 2.5</p><p>[先修：Fingerless Index Around Normal, Thumbaround Normal]</p><p>Fingerless Thumbaround Normal 1.5</p><p>[先修：Thumbaround Normal]</p><p>Fingerless Thumbaround Reverse 1.5</p><p>[先修：Index Around Normal]</p><p>Fingerless Index Around Normal 2.0</p><p>[先修：Index Around Normal]</p><p>Meophyte Sonic Normal 1.0</p><p>[先修：Sonic Normal]</p><h3 id="Level-4"><a href="#Level-4" class="headerlink" title="Level 4"></a>Level 4</h3><p>Flick 1.5</p><p>Index Spin Normal 2.0</p><p>[先修：Index Around Normal]</p><p>Back Spin Normal 2.5</p><p>[先修：Index Back Around]</p><p>Middle Around Reverse 2.5</p><p>[先修：Middle Around Normal]</p><p>Fingerless Korean Extended ThumbAround Normal 2.5</p><p>[先修：Korean Extended ThumbAround Normal]</p><p>Socissor’s Spin 2.0</p><p>[先修：Twist Sonic Normal]</p><p>Neophyte Back Around 2.0</p><p>[先修：Index Back Around]</p><p>Korean Fingerless Thumbaround Reverse 1.5</p><p>[先修：Fingerless Thumbaround Reverse]</p><p>Shadow Normal 3.0</p><p>[先修：charge Normal]</p><p>Thumb Spin Normal 2.5</p><p>[先修：Thumbaround Normal]</p><p>Thumb Spin Reverse 2.5</p><p>[先修：Thumbaround Reverse]</p><p>Middle Back Around 3.0</p><p>[先修：Index Back Around]</p><p>Extended ThumbAround Reverse 3.0</p><p>[先修：Index Back Around, Fingerless Thumbaround Reverse]</p>]]></content>
+    
+    
+    
+    <tags>
+      
+      <tag>转笔</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>书签</title>
+    <link href="/2020/04/10/%E4%B9%A6%E7%AD%BE/"/>
+    <url>/2020/04/10/%E4%B9%A6%E7%AD%BE/</url>
+    
+    <content type="html"><![CDATA[<h2 id="常用的书签"><a href="#常用的书签" class="headerlink" title="常用的书签"></a>常用的书签</h2><h3 id="博客"><a href="#博客" class="headerlink" title="博客"></a>博客</h3><p>我的博客：<a href="https://exhibition666.github.io/" target="_blank" rel="noopener">https://exhibition666.github.io/</a></p><p>Hexo Fluid(用户手册)：<a href="https://fluid-dev.github.io/hexo-fluid-docs/" target="_blank" rel="noopener">https://fluid-dev.github.io/hexo-fluid-docs/</a></p>]]></content>
+    
+    
+    <categories>
+      
+      <category>书签</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>书签</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>Penbeat学习</title>
+    <link href="/2020/04/09/Penbeat%E5%AD%A6%E4%B9%A0/"/>
+    <url>/2020/04/09/Penbeat%E5%AD%A6%E4%B9%A0/</url>
+    
+    <content type="html"><![CDATA[<p>参考视频：</p><p><a href="https://www.bilibili.com/video/BV1AW411T7Y6?p=1" target="_blank" rel="noopener">【冰块】penbeat教学第一期-识谱与节奏</a></p><h3 id="基本音"><a href="#基本音" class="headerlink" title="基本音"></a>基本音</h3><p>1 手腕：用手腕击打桌面</p><p>2 笔尖：用笔尖击打桌面</p><p>3 笔杆：用整个笔身击打桌面</p><p>4 笔刷：笔尖与桌面摩擦</p><p>5 指骨：手指关节敲打桌面，常用方式为中指的关节</p><p>6 笔尾： 将笔身竖起来，用笔尾击打桌面</p><p>X 交叉音： 在双手持笔的前提下，用笔身去击打另一支笔的笔身</p><p>！二段跳：轻握笔尾用笔尖打击桌面，打出弹跳音</p><p>u 桌楞： 用笔身去击打桌棱</p><h3 id="常用8beat谱子"><a href="#常用8beat谱子" class="headerlink" title="常用8beat谱子"></a>常用8beat谱子</h3><blockquote><p>1232  2132</p><p>1231  2132</p><p>1231  2131</p><p>1232  1132</p><p>1132  2132</p><p>1132  2131</p></blockquote><h3 id="常用16beat谱子"><a href="#常用16beat谱子" class="headerlink" title="常用16beat谱子"></a>常用16beat谱子</h3><blockquote><p>1221  3221  2212  3221</p><p>1212  3221  2212  3221</p><p>1212  3121  2112  3221</p><p>1212  3123  1313  3123</p><p>1212  3223  2212  3223</p><p>1222  3223  2312  3223</p><p>1211  3223  1311  3221</p><p>1221  3221  2121  3221</p></blockquote>]]></content>
+    
+    
+    <categories>
+      
+      <category>penbeat</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>penbeat</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
+    <title>阿里云服务器部署JDK8</title>
+    <link href="/2020/04/08/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2JDK8/"/>
+    <url>/2020/04/08/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2JDK8/</url>
+    
+    <content type="html"><![CDATA[<h3 id="上传文件"><a href="#上传文件" class="headerlink" title="上传文件"></a>上传文件</h3><p><strong>上传linux使用的JDK压缩包至服务器上, 上传到opt文件夹下</strong></p><p>JDK下载地址 ：<a href="https://www.oracle.com/java/technologies/javase-downloads.html" target="_blank" rel="noopener">https://www.oracle.com/java/technologies/javase-downloads.html</a></p><p>Xftp下载地址：&lt;<a href="https://www.netsarang.com/zh/all-downloads/" target="_blank" rel="noopener">https://www.netsarang.com/zh/all-downloads/</a></p><p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2JDK8/1.png" srcset="/img/loading.gif" alt=""></p><h3 id="解压并移动"><a href="#解压并移动" class="headerlink" title="解压并移动"></a>解压并移动</h3><p>解压</p><pre><code>tar -zxvf 压宿包命称</code></pre><p>移动</p><p>将解压出来的文件移到home目录下</p><pre><code>mv 文件夹名称/ /home</code></pre><h3 id="配置环境变量"><a href="#配置环境变量" class="headerlink" title="配置环境变量"></a>配置环境变量</h3><pre><code>vim /etc/profile</code></pre><p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2JDK8/2.png" srcset="/img/loading.gif" alt=""></p><h3 id="使环境变量生效"><a href="#使环境变量生效" class="headerlink" title="使环境变量生效"></a>使环境变量生效</h3><pre><code>source /etc/profile</code></pre><h3 id="查看JDK版本"><a href="#查看JDK版本" class="headerlink" title="查看JDK版本"></a>查看JDK版本</h3><pre><code>Java -version</code></pre>]]></content>
+    
+    
+    <categories>
+      
+      <category>JDK</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>阿里云</tag>
+      
+      <tag>服务器</tag>
+      
+      <tag>部署后端项目</tag>
+      
+      <tag>JDK</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>阿里云服务器部署mysql5.7.2版本</title>
     <link href="/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/"/>
     <url>/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/</url>
     
-    <content type="html"><![CDATA[<h2 id="连接与传输"><a href="#连接与传输" class="headerlink" title="连接与传输"></a>连接与传输</h2><p>使用 Xftp 和 Xshell 连接远程服务器和传输文件</p><p>Xftp下载地址：<a href="https://www.netsarang.com/zh/all-downloads/" target="_blank" rel="noopener">https://www.netsarang.com/zh/all-downloads/</a></p><p>Xshell下载地址：<a href="https://www.netsarang.com/zh/all-downloads/" target="_blank" rel="noopener">https://www.netsarang.com/zh/all-downloads/</a></p><p>学校和家庭免费使用：<a href="https://www.netsarang.com/zh/free-for-home-school/" target="_blank" rel="noopener">https://www.netsarang.com/zh/free-for-home-school/</a></p><h2 id="压缩版安装"><a href="#压缩版安装" class="headerlink" title="压缩版安装"></a>压缩版安装</h2><h3 id="查看操作系统版本"><a href="#查看操作系统版本" class="headerlink" title="查看操作系统版本"></a>查看操作系统版本</h3><pre><code># cat /etc/redhat-release</code></pre><h3 id="安装前的环境准备"><a href="#安装前的环境准备" class="headerlink" title="安装前的环境准备"></a>安装前的环境准备</h3><p>查看是否安装过mysql</p><p>首先检测Linux操作系统中是否安装了MySQL：</p><pre><code># rpm -qa | grep -i mysql</code></pre><p>卸载安装包</p><p>如果有信息出现，则进行删除，命令如下：</p><pre><code># rpm -e --nodeps 包名</code></pre><p>删除老版本mysql的开发头文件和库</p><pre><code># rpm -e --nodeps 包名</code></pre><p>注意：卸载后/var/lib/mysql中的数据及/etc/my.cnf不会删除，如果确定没用后就手工删除：</p><pre><code># rm -f /etc/my.cnf# rm -fr /var/lib/mysql</code></pre><p>删除完成后，才能进行安装，否则安装会出错。</p><p>查看旧的mysql安装目录</p><pre><code># whereis mysql</code></pre><p>删除旧的安装目录</p><pre><code># rm -rf 目录</code></pre><p>新建目录</p><pre><code># cd /# mkdir data# cd data/</code></pre><h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><p><strong>安装包准备</strong></p><p>安装前先准备好压缩安装包或者到mysq官网下载即可，将安装报上传至/data/目录下后解压</p><pre><code># cd /data/</code></pre><pre><code># tar -zxvf 安装包 -C /data/</code></pre><p><strong>目录名太长了，重命名为mysql</strong></p><pre><code># mv mysql-5.7.22-linux-glibc2.12-x86_64 mysql</code></pre><p><strong>在mysql下面新建目录data</strong></p><pre><code># cd mysql# mkdir data# ll</code></pre><h3 id="查看mysql用户和组"><a href="#查看mysql用户和组" class="headerlink" title="查看mysql用户和组"></a>查看mysql用户和组</h3><p><strong>查看mysql用户或组是否存在</strong></p><pre><code># id mysql</code></pre><p><strong>如需删除用户和组，执行下列操作</strong></p><pre><code># groupdel mysql# userdel -f mysql不行就进入 vi /etc/grpup 找到mysql 在其前面加上 #</code></pre><h3 id="添加mysql用户组和用户"><a href="#添加mysql用户组和用户" class="headerlink" title="添加mysql用户组和用户"></a><strong>添加mysql用户组和用户</strong></h3><p>添加mysql用户组和用户，并且将mysql用户和mysql组关联</p><p><strong>创建mysql组</strong></p><pre><code># groupadd mysql</code></pre><p><strong>查看是否创建成功</strong></p><pre><code># cat /etc/**group |** grep mysqlmysql:x:500:则表示成功</code></pre><p><strong>创建mysql用户</strong></p><pre><code># useradd -r -g mysql mysql </code></pre><p><strong>查看是否创建成功</strong></p><pre><code># cat /etc/**passwd |** grep mysql</code></pre><p><strong>给mysql用户设置密码</strong></p><pre><code># passwd mysql</code></pre><h3 id="给mysql授权"><a href="#给mysql授权" class="headerlink" title="给mysql授权"></a>给mysql授权</h3><p>给mysql授权,以便能够读写以及执行必要的文件</p><pre><code># chown -R mysql:mysql /data/mysql# chmod -R 775 /data/mysql</code></pre><h3 id="查看有无创建my-default-cnf配置文件"><a href="#查看有无创建my-default-cnf配置文件" class="headerlink" title="查看有无创建my-default.cnf配置文件"></a>查看有无创建my-default.cnf配置文件</h3><p>进入mysql/support-files文件夹的内容，查看是否有my-default.cnf配置文件，如果没有默认的配置文件，需要手动创建一个my-default.cnf配置文件</p><pre><code># cd /data/mysql/support-files/# ll</code></pre><h3 id="my-default-cnf配置文件内容"><a href="#my-default-cnf配置文件内容" class="headerlink" title="my-default.cnf配置文件内容"></a>my-default.cnf配置文件内容</h3><pre><code>#vi my-default.cnf</code></pre><pre><code>[client]port = 3306socket = /tmp/mysql.sock[mysqld]basedir = /data/mysqldatadir = /data/mysql/databind-address = 0.0.0.0port = 3306socket = /tmp/mysql.sockskip-external-lockingkey_buffer_size = 128Mmax_allowed_packet = 1Mtable_open_cache = 256sort_buffer_size = 1Mread_buffer_size = 1Mread_rnd_buffer_size = 2Mmyisam_sort_buffer_size = 8Mthread_cache_size = 8query_cache_size= 16Mmax_connections = 213wait_timeout = 31536000interactive_timeout = 30max_connect_errors = 9long_query_time = 1tmp_table_size = 16M#log-bin=mysql-bin#binlog_format=mixed#server-id = 1lower_case_table_names = 1[mysqldump]quickmax_allowed_packet = 8M[mysql]no-auto-rehash[myisamchk]key_buffer_size = 12Msort_buffer_size = 1Mread_buffer = 1Mwrite_buffer = 1M[mysqlhotcopy]interactive-timeout</code></pre><h3 id="重新授权"><a href="#重新授权" class="headerlink" title="重新授权"></a>重新授权</h3><pre><code># chown -R mysql:mysql /data/mysql# chmod -R 775 /data/mysql</code></pre><h3 id="移动my-default-cnf位置"><a href="#移动my-default-cnf位置" class="headerlink" title="移动my-default.cnf位置"></a>移动my-default.cnf位置</h3><p>复制support-files文件下的my-default.cnf和mysql.server</p><pre><code># cp my-default.cnf /etc/my.cnf# cp mysql.server /etc/init.d/mysqld</code></pre><h3 id="编辑mysqld，修改为mysql的指定路径"><a href="#编辑mysqld，修改为mysql的指定路径" class="headerlink" title="编辑mysqld，修改为mysql的指定路径"></a>编辑mysqld，修改为mysql的指定路径</h3><pre><code># vi /etc/init.d/mysqld</code></pre><p>进入编辑页面，按i 可编辑修改，按ctrl+c停止修改，然后  :wq 保存修改</p><p><img src="/img/2020.4.8/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/1.png" srcset="/img/loading.gif" alt=""></p><h3 id="把mysql路径添加到环境变量中"><a href="#把mysql路径添加到环境变量中" class="headerlink" title="把mysql路径添加到环境变量中"></a>把mysql路径添加到环境变量中</h3><pre><code></code></pre><p>文件末尾添加export MYSQL=/data/mysql，path中加入$MYSQL/bin:</p><p><img src="/img/2020.4.8/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/2.png" srcset="/img/loading.gif" alt=""></p><h3 id="使修改后的profile文件生效"><a href="#使修改后的profile文件生效" class="headerlink" title="使修改后的profile文件生效"></a>使修改后的profile文件生效</h3><pre><code># source /etc/profile</code></pre><h3 id="执行数据库初始化操作"><a href="#执行数据库初始化操作" class="headerlink" title="执行数据库初始化操作"></a>执行数据库初始化操作</h3><p>执行文件为mysql下bin文件夹中mysql_install_db，basedir为安装目录，datadir为数据文件目录。注：mysql_install_db在5.6版本中位于scripts文件夹，5.7已经取消该文件夹，合并到bin下:</p><pre><code>#cd /data/mysql/bin# ./mysqld --basedir=/data/mysql --user=mysql --datadir=/data/mysql/data --initialize</code></pre><p>如果 报error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory<br>就需要 安装libaio</p><pre><code># yum install libaio</code></pre><p>如果报：[ERROR] –initialize specified but the data directory has files in it. Aborting</p><p>说明已经执行过一次，需要把’/data/mysql/data目录删除，重新创建，再授权</p><pre><code>[root@centOS mysql]# cd /data/mysql[root@centOS mysql]# rm -rf data[root@centOS mysql]# mkdir data[root@centOS mysql]# chown -R mysql:mysql /data/mysql[root@centOS mysql]# chmod -R 775 /data/mysql[root@centOS mysql]#</code></pre><p>然后再执行：</p><pre><code>#cd /data/mysql/bin# ./mysqld --basedir=/data/mysql --user=mysql --datadir=/data/mysql/data --initialize</code></pre><h3 id="完成之后，启动mysql服务"><a href="#完成之后，启动mysql服务" class="headerlink" title="完成之后，启动mysql服务"></a>完成之后，启动mysql服务</h3><pre><code># service mysqld start</code></pre><p>此时已经可以启动服务，但整个工程只算完成了一半。<br>注意：新版的可能会报错，因为mysqld_safe的原因，旧版本安装的时候没有报错，只需要把mysqld_safe中的默认路径修改为自己的目标路径，再执行就可以了。</p><h2 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h2><h3 id="首先关闭服务"><a href="#首先关闭服务" class="headerlink" title="首先关闭服务"></a>首先关闭服务</h3><pre><code>#service mysqld stop</code></pre><h3 id="替换路径"><a href="#替换路径" class="headerlink" title="替换路径"></a>替换路径</h3><p>把mysql/bin/mysqld_safe中usr/local/mysql换成指定安装的路径名，然后执行下面代码</p><pre><code># mysqld_safe --user=mysql --skip-grant-tables --skip-networking &amp;</code></pre><h3 id="修改root密码"><a href="#修改root密码" class="headerlink" title="修改root密码"></a>修改root密码</h3><p>此时已经进入免过滤状态，开始修改root密码。注：5.6版本user表中密码字段是password，5.7之后改为authentication_string，不再有password</p><pre><code>[root@ZhOu bin]# mysqlmysql&gt; use mysql;mysql&gt; update user set authentication_string=PASSWORD(&#39;root&#39;) where user=&#39;root&#39;;mysql&gt; flush privileges;mysql&gt; exit;</code></pre><h3 id="再次设置密码"><a href="#再次设置密码" class="headerlink" title="再次设置密码"></a>再次设置密码</h3><p>此时，密码已经修改完成。退出重新登录，本以为搞定了，但是创建数据库，却报错了，错误是：ERROR 1820 (HY000): You must reset your password using ALTER USER statement。原来第一登录，还要再次设置密码,修改之后，创建成功</p><pre><code> # mysql -u root -p mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;root&#39;;mysql&gt; flush privileges;mysql&gt; exit;</code></pre><h2 id="远程登录"><a href="#远程登录" class="headerlink" title="远程登录"></a>远程登录</h2><h3 id="确定mysql端口号"><a href="#确定mysql端口号" class="headerlink" title="确定mysql端口号"></a>确定mysql端口号</h3><pre><code>mysql&gt; show global variables like &#39;port&#39;;</code></pre><p>如果不是3306可进行修改mysql端口号</p><ol><li>vi /etc/my.cnf</li><li>修改 port=3306</li><li>重启 # service mysqld restart</li></ol><h3 id="修改远程连接权限"><a href="#修改远程连接权限" class="headerlink" title="修改远程连接权限"></a>修改远程连接权限</h3><p>很简单，只需要修改user表中root用户的host就可以了。改完之后，记得重启一下服务，再次远程连接</p><pre><code># mysql -uroot -pmysql&gt; use mysql;mysql&gt; update user set host=&#39;%&#39; where user=&#39;root&#39;;mysql&gt; exit;# service mysqld restart</code></pre><h3 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h3><p>如果还连不上报10060 unknown error ,则关闭它</p><pre><code>CentOS7.x 默认的防火墙不是iptables，而是firewalle.查看防火墙状态（关闭后显示not running，开启后显示running）# firewall-cmd --state停止防火墙firewall# systemctl stop firewalld.service禁止防火墙firewall开机启动# systemctl disable firewalld.serviceCentOS6默认的防火墙是iptables1。防火墙即时生效，重启后复原：关闭# service iptables stop开启# service iptables start2。防火墙永久性生效，重启后不会复原关闭：# chkconfig iptables off开启：# chkconfig iptables on</code></pre><h3 id="阿里云添加安全组规则，开放端口号"><a href="#阿里云添加安全组规则，开放端口号" class="headerlink" title="阿里云添加安全组规则，开放端口号"></a>阿里云添加安全组规则，开放端口号</h3><p>官网手册: <a href="https://help.aliyun.com/document_detail/25471.html?spm=5176.100241.0.0.IneJPl" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/25471.html?spm=5176.100241.0.0.IneJPl</a></p><h3 id="设置mysql开机自启动"><a href="#设置mysql开机自启动" class="headerlink" title="设置mysql开机自启动"></a>设置mysql开机自启动</h3><pre><code># chkconfig mysqld on</code></pre>]]></content>
+    <content type="html"><![CDATA[<h2 id="连接与传输"><a href="#连接与传输" class="headerlink" title="连接与传输"></a>连接与传输</h2><p>使用 Xftp 和 Xshell 连接远程服务器和传输文件</p><p>Xftp下载地址：<a href="https://www.netsarang.com/zh/all-downloads/" target="_blank" rel="noopener">https://www.netsarang.com/zh/all-downloads/</a></p><p>Xshell下载地址：<a href="https://www.netsarang.com/zh/all-downloads/" target="_blank" rel="noopener">https://www.netsarang.com/zh/all-downloads/</a></p><p>学校和家庭免费使用：<a href="https://www.netsarang.com/zh/free-for-home-school/" target="_blank" rel="noopener">https://www.netsarang.com/zh/free-for-home-school/</a></p><h2 id="压缩版安装"><a href="#压缩版安装" class="headerlink" title="压缩版安装"></a>压缩版安装</h2><h3 id="查看操作系统版本"><a href="#查看操作系统版本" class="headerlink" title="查看操作系统版本"></a>查看操作系统版本</h3><pre><code># cat /etc/redhat-release</code></pre><h3 id="安装前的环境准备"><a href="#安装前的环境准备" class="headerlink" title="安装前的环境准备"></a>安装前的环境准备</h3><p>查看是否安装过mysql</p><p>首先检测Linux操作系统中是否安装了MySQL：</p><pre><code># rpm -qa | grep -i mysql</code></pre><p>卸载安装包</p><p>如果有信息出现，则进行删除，命令如下：</p><pre><code># rpm -e --nodeps 包名</code></pre><p>删除老版本mysql的开发头文件和库</p><pre><code># rpm -e --nodeps 包名</code></pre><p>注意：卸载后/var/lib/mysql中的数据及/etc/my.cnf不会删除，如果确定没用后就手工删除：</p><pre><code># rm -f /etc/my.cnf# rm -fr /var/lib/mysql</code></pre><p>删除完成后，才能进行安装，否则安装会出错。</p><p>查看旧的mysql安装目录</p><pre><code># whereis mysql</code></pre><p>删除旧的安装目录</p><pre><code># rm -rf 目录</code></pre><p>新建目录</p><pre><code># cd /# mkdir data# cd data/</code></pre><h3 id="安装过程"><a href="#安装过程" class="headerlink" title="安装过程"></a>安装过程</h3><p><strong>安装包准备</strong></p><p>安装前先准备好压缩安装包或者到mysq官网下载即可，将安装报上传至/data/目录下后解压</p><pre><code># cd /data/</code></pre><pre><code># tar -zxvf 安装包 -C /data/</code></pre><p><strong>目录名太长了，重命名为mysql</strong></p><pre><code># mv mysql-5.7.22-linux-glibc2.12-x86_64 mysql</code></pre><p><strong>在mysql下面新建目录data</strong></p><pre><code># cd mysql# mkdir data# ll</code></pre><h3 id="查看mysql用户和组"><a href="#查看mysql用户和组" class="headerlink" title="查看mysql用户和组"></a>查看mysql用户和组</h3><p><strong>查看mysql用户或组是否存在</strong></p><pre><code># id mysql</code></pre><p><strong>如需删除用户和组，执行下列操作</strong></p><pre><code># groupdel mysql# userdel -f mysql不行就进入 vi /etc/grpup 找到mysql 在其前面加上 #</code></pre><h3 id="添加mysql用户组和用户"><a href="#添加mysql用户组和用户" class="headerlink" title="添加mysql用户组和用户"></a><strong>添加mysql用户组和用户</strong></h3><p>添加mysql用户组和用户，并且将mysql用户和mysql组关联</p><p><strong>创建mysql组</strong></p><pre><code># groupadd mysql</code></pre><p><strong>查看是否创建成功</strong></p><pre><code># cat /etc/**group |** grep mysqlmysql:x:500:则表示成功</code></pre><p><strong>创建mysql用户</strong></p><pre><code># useradd -r -g mysql mysql </code></pre><p><strong>查看是否创建成功</strong></p><pre><code># cat /etc/**passwd |** grep mysql</code></pre><p><strong>给mysql用户设置密码</strong></p><pre><code># passwd mysql</code></pre><h3 id="给mysql授权"><a href="#给mysql授权" class="headerlink" title="给mysql授权"></a>给mysql授权</h3><p>给mysql授权,以便能够读写以及执行必要的文件</p><pre><code># chown -R mysql:mysql /data/mysql# chmod -R 775 /data/mysql</code></pre><h3 id="查看有无创建my-default-cnf配置文件"><a href="#查看有无创建my-default-cnf配置文件" class="headerlink" title="查看有无创建my-default.cnf配置文件"></a>查看有无创建my-default.cnf配置文件</h3><p>进入mysql/support-files文件夹的内容，查看是否有my-default.cnf配置文件，如果没有默认的配置文件，需要手动创建一个my-default.cnf配置文件</p><pre><code># cd /data/mysql/support-files/# ll</code></pre><h3 id="my-default-cnf配置文件内容"><a href="#my-default-cnf配置文件内容" class="headerlink" title="my-default.cnf配置文件内容"></a>my-default.cnf配置文件内容</h3><pre><code>#vi my-default.cnf</code></pre><pre><code>[client]port = 3306socket = /tmp/mysql.sock[mysqld]basedir = /data/mysqldatadir = /data/mysql/databind-address = 0.0.0.0port = 3306socket = /tmp/mysql.sockskip-external-lockingkey_buffer_size = 128Mmax_allowed_packet = 1Mtable_open_cache = 256sort_buffer_size = 1Mread_buffer_size = 1Mread_rnd_buffer_size = 2Mmyisam_sort_buffer_size = 8Mthread_cache_size = 8query_cache_size= 16Mmax_connections = 213wait_timeout = 31536000interactive_timeout = 30max_connect_errors = 9long_query_time = 1tmp_table_size = 16M#log-bin=mysql-bin#binlog_format=mixed#server-id = 1lower_case_table_names = 1[mysqldump]quickmax_allowed_packet = 8M[mysql]no-auto-rehash[myisamchk]key_buffer_size = 12Msort_buffer_size = 1Mread_buffer = 1Mwrite_buffer = 1M[mysqlhotcopy]interactive-timeout</code></pre><h3 id="重新授权"><a href="#重新授权" class="headerlink" title="重新授权"></a>重新授权</h3><pre><code># chown -R mysql:mysql /data/mysql# chmod -R 775 /data/mysql</code></pre><h3 id="移动my-default-cnf位置"><a href="#移动my-default-cnf位置" class="headerlink" title="移动my-default.cnf位置"></a>移动my-default.cnf位置</h3><p>复制support-files文件下的my-default.cnf和mysql.server</p><pre><code># cp my-default.cnf /etc/my.cnf# cp mysql.server /etc/init.d/mysqld</code></pre><h3 id="编辑mysqld，修改为mysql的指定路径"><a href="#编辑mysqld，修改为mysql的指定路径" class="headerlink" title="编辑mysqld，修改为mysql的指定路径"></a>编辑mysqld，修改为mysql的指定路径</h3><pre><code># vi /etc/init.d/mysqld</code></pre><p>进入编辑页面，按i 可编辑修改，按ctrl+c停止修改，然后  :wq 保存修改</p><p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/1.png" srcset="/img/loading.gif" alt=""></p><h3 id="把mysql路径添加到环境变量中"><a href="#把mysql路径添加到环境变量中" class="headerlink" title="把mysql路径添加到环境变量中"></a>把mysql路径添加到环境变量中</h3><pre><code></code></pre><p>文件末尾添加export MYSQL=/data/mysql，path中加入$MYSQL/bin:</p><p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E9%83%A8%E7%BD%B2mysql/2.png" srcset="/img/loading.gif" alt=""></p><h3 id="使修改后的profile文件生效"><a href="#使修改后的profile文件生效" class="headerlink" title="使修改后的profile文件生效"></a>使修改后的profile文件生效</h3><pre><code># source /etc/profile</code></pre><h3 id="执行数据库初始化操作"><a href="#执行数据库初始化操作" class="headerlink" title="执行数据库初始化操作"></a>执行数据库初始化操作</h3><p>执行文件为mysql下bin文件夹中mysql_install_db，basedir为安装目录，datadir为数据文件目录。注：mysql_install_db在5.6版本中位于scripts文件夹，5.7已经取消该文件夹，合并到bin下:</p><pre><code>#cd /data/mysql/bin# ./mysqld --basedir=/data/mysql --user=mysql --datadir=/data/mysql/data --initialize</code></pre><p>如果 报error while loading shared libraries: libaio.so.1: cannot open shared object file: No such file or directory<br>就需要 安装libaio</p><pre><code># yum install libaio</code></pre><p>如果报：[ERROR] –initialize specified but the data directory has files in it. Aborting</p><p>说明已经执行过一次，需要把’/data/mysql/data目录删除，重新创建，再授权</p><pre><code>[root@centOS mysql]# cd /data/mysql[root@centOS mysql]# rm -rf data[root@centOS mysql]# mkdir data[root@centOS mysql]# chown -R mysql:mysql /data/mysql[root@centOS mysql]# chmod -R 775 /data/mysql[root@centOS mysql]#</code></pre><p>然后再执行：</p><pre><code>#cd /data/mysql/bin# ./mysqld --basedir=/data/mysql --user=mysql --datadir=/data/mysql/data --initialize</code></pre><h3 id="完成之后，启动mysql服务"><a href="#完成之后，启动mysql服务" class="headerlink" title="完成之后，启动mysql服务"></a>完成之后，启动mysql服务</h3><pre><code># service mysqld start</code></pre><p>此时已经可以启动服务，但整个工程只算完成了一半。<br>注意：新版的可能会报错，因为mysqld_safe的原因，旧版本安装的时候没有报错，只需要把mysqld_safe中的默认路径修改为自己的目标路径，再执行就可以了。</p><h2 id="修改密码"><a href="#修改密码" class="headerlink" title="修改密码"></a>修改密码</h2><h3 id="首先关闭服务"><a href="#首先关闭服务" class="headerlink" title="首先关闭服务"></a>首先关闭服务</h3><pre><code>#service mysqld stop</code></pre><h3 id="替换路径"><a href="#替换路径" class="headerlink" title="替换路径"></a>替换路径</h3><p>把mysql/bin/mysqld_safe中usr/local/mysql换成指定安装的路径名，然后执行下面代码</p><pre><code># mysqld_safe --user=mysql --skip-grant-tables --skip-networking &amp;</code></pre><h3 id="修改root密码"><a href="#修改root密码" class="headerlink" title="修改root密码"></a>修改root密码</h3><p>此时已经进入免过滤状态，开始修改root密码。注：5.6版本user表中密码字段是password，5.7之后改为authentication_string，不再有password</p><pre><code>[root@ZhOu bin]# mysqlmysql&gt; use mysql;mysql&gt; update user set authentication_string=PASSWORD(&#39;root&#39;) where user=&#39;root&#39;;mysql&gt; flush privileges;mysql&gt; exit;</code></pre><h3 id="再次设置密码"><a href="#再次设置密码" class="headerlink" title="再次设置密码"></a>再次设置密码</h3><p>此时，密码已经修改完成。退出重新登录，本以为搞定了，但是创建数据库，却报错了，错误是：ERROR 1820 (HY000): You must reset your password using ALTER USER statement。原来第一登录，还要再次设置密码,修改之后，创建成功</p><pre><code> # mysql -u root -p mysql&gt; alter user &#39;root&#39;@&#39;localhost&#39; identified by &#39;root&#39;;mysql&gt; flush privileges;mysql&gt; exit;</code></pre><h2 id="远程登录"><a href="#远程登录" class="headerlink" title="远程登录"></a>远程登录</h2><h3 id="确定mysql端口号"><a href="#确定mysql端口号" class="headerlink" title="确定mysql端口号"></a>确定mysql端口号</h3><pre><code>mysql&gt; show global variables like &#39;port&#39;;</code></pre><p>如果不是3306可进行修改mysql端口号</p><ol><li>vi /etc/my.cnf</li><li>修改 port=3306</li><li>重启 # service mysqld restart</li></ol><h3 id="修改远程连接权限"><a href="#修改远程连接权限" class="headerlink" title="修改远程连接权限"></a>修改远程连接权限</h3><p>很简单，只需要修改user表中root用户的host就可以了。改完之后，记得重启一下服务，再次远程连接</p><pre><code># mysql -uroot -pmysql&gt; use mysql;mysql&gt; update user set host=&#39;%&#39; where user=&#39;root&#39;;mysql&gt; exit;# service mysqld restart</code></pre><h3 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h3><p>如果还连不上报10060 unknown error ,则关闭它</p><pre><code>CentOS7.x 默认的防火墙不是iptables，而是firewalle.查看防火墙状态（关闭后显示not running，开启后显示running）# firewall-cmd --state停止防火墙firewall# systemctl stop firewalld.service禁止防火墙firewall开机启动# systemctl disable firewalld.serviceCentOS6默认的防火墙是iptables1。防火墙即时生效，重启后复原：关闭# service iptables stop开启# service iptables start2。防火墙永久性生效，重启后不会复原关闭：# chkconfig iptables off开启：# chkconfig iptables on</code></pre><h3 id="阿里云添加安全组规则，开放端口号"><a href="#阿里云添加安全组规则，开放端口号" class="headerlink" title="阿里云添加安全组规则，开放端口号"></a>阿里云添加安全组规则，开放端口号</h3><p>官网手册: <a href="https://help.aliyun.com/document_detail/25471.html?spm=5176.100241.0.0.IneJPl" target="_blank" rel="noopener">https://help.aliyun.com/document_detail/25471.html?spm=5176.100241.0.0.IneJPl</a></p><h3 id="设置mysql开机自启动"><a href="#设置mysql开机自启动" class="headerlink" title="设置mysql开机自启动"></a>设置mysql开机自启动</h3><pre><code># chkconfig mysqld on</code></pre>]]></content>
     
     
     <categories>
@@ -37,7 +278,7 @@
     <link href="/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/"/>
     <url>/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/</url>
     
-    <content type="html"><![CDATA[<h2 id="购买阿里云服务器"><a href="#购买阿里云服务器" class="headerlink" title="购买阿里云服务器"></a>购买阿里云服务器</h2><p>官方地址：<a href="https://www.aliyun.com/" target="_blank" rel="noopener">https://www.aliyun.com/</a></p><h2 id="打包本地项目"><a href="#打包本地项目" class="headerlink" title="打包本地项目"></a>打包本地项目</h2><p>1.首先在springboot项目中要有此插件</p><pre><code class="xml">&lt;build&gt;    &lt;plugins&gt;        &lt;plugin&gt;            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;        &lt;/plugin&gt;    &lt;/plugins&gt;&lt;/build&gt;</code></pre><p>2.然后再点击右侧的Maven进行打包</p><p><img src="/img/2020.3.31/1.png" srcset="/img/loading.gif" alt="1"></p><p>3.打包完成后，找到打包后文件所在目录</p><p>打开项目所在目录 —&gt; target文件夹 —&gt; 找到jar结尾的文件<img src="/img/2020.3.31/2.png" srcset="/img/loading.gif" alt="2"></p><p>4.测试在本地是否能够正常运行</p><p>在target文件夹下打开cmd，输入命令</p><pre><code class="cmd">java -jar 打包文件的名称</code></pre><h2 id="部署mysql"><a href="#部署mysql" class="headerlink" title="部署mysql"></a>部署mysql</h2><p>详情请参考另一篇文章：<a href="http://localhost:4000/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/" target="_blank" rel="noopener">阿里云部署mysql</a></p>]]></content>
+    <content type="html"><![CDATA[<h2 id="购买阿里云服务器"><a href="#购买阿里云服务器" class="headerlink" title="购买阿里云服务器"></a>购买阿里云服务器</h2><p>官方地址：<a href="https://www.aliyun.com/" target="_blank" rel="noopener">https://www.aliyun.com/</a></p><h2 id="打包本地项目"><a href="#打包本地项目" class="headerlink" title="打包本地项目"></a>打包本地项目</h2><p>1.首先在springboot项目中要有此插件</p><pre><code class="xml">&lt;build&gt;    &lt;plugins&gt;        &lt;plugin&gt;            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;        &lt;/plugin&gt;    &lt;/plugins&gt;&lt;/build&gt;</code></pre><p>2.然后再点击右侧的Maven进行打包</p><p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/1.png" srcset="/img/loading.gif" alt="1"></p><p>3.打包完成后，找到打包后文件所在目录</p><p>打开项目所在目录 —&gt; target文件夹 —&gt; 找到jar结尾的文件<img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/2.png" srcset="/img/loading.gif" alt="2"></p><p>4.测试在本地是否能够正常运行</p><p>在target文件夹下打开cmd，输入命令</p><pre><code class="cmd">java -jar 打包文件的名称</code></pre><h2 id="部署mysql"><a href="#部署mysql" class="headerlink" title="部署mysql"></a>部署mysql</h2><p>详情请参考另一篇文章：<a href="http://localhost:4000/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/" target="_blank" rel="noopener">阿里云部署mysql</a></p><h2 id="部署JDK"><a href="#部署JDK" class="headerlink" title="部署JDK"></a>部署JDK</h2><p>详情请参考另一篇文章：<a href="http://localhost:4000/2020/04/08/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2JDK8/" target="_blank" rel="noopener">阿里云服务器部署JDK8</a></p><h2 id="上传项目"><a href="#上传项目" class="headerlink" title="上传项目"></a>上传项目</h2><p>将上面打包好的项目通过Xftp工具上传到服务器opt目录</p><p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/3.png" srcset="/img/loading.gif" alt="1"></p><h2 id="运行项目"><a href="#运行项目" class="headerlink" title="运行项目"></a>运行项目</h2><pre><code>java -jar 项目的jar文件</code></pre><p><strong>通过浏览器进行访问，如果访问不了，应该是没有开放相应的端口，通过阿里云的安全组实例打开相应的端口号</strong></p><p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/4.png" srcset="/img/loading.gif" alt="1"></p><p>至此，阿里云服务器部署后端项目成功！！！</p>]]></content>
     
     
     <categories>
@@ -56,6 +297,8 @@
       <tag>mysql</tag>
       
       <tag>部署后端项目</tag>
+      
+      <tag>JDK</tag>
       
     </tags>
     

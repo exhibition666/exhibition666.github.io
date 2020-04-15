@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>阿里云服务器部署后端项目 - exhibition666</title>
+  <title>Springboot整合swagger - exhibition666</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -124,7 +124,7 @@
               
                 <p class="mt-3 post-meta">
                   <i class="fas fa-calendar-alt" aria-hidden="true"></i>
-                  星期二, 三月 31日 2020, 9:42 晚上
+                  星期二, 四月 14日 2020, 8:49 晚上
                 </p>
               
 
@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    301 字
+                    797 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      1 分钟
+                      3 分钟
                   </span>
                 
 
@@ -169,30 +169,73 @@
           <div class="post-content mx-auto" id="post">
             
             <div class="markdown-body">
-              <h2 id="购买阿里云服务器"><a href="#购买阿里云服务器" class="headerlink" title="购买阿里云服务器"></a>购买阿里云服务器</h2><p>官方地址：<a href="https://www.aliyun.com/" target="_blank" rel="noopener">https://www.aliyun.com/</a></p>
-<h2 id="打包本地项目"><a href="#打包本地项目" class="headerlink" title="打包本地项目"></a>打包本地项目</h2><p>1.首先在springboot项目中要有此插件</p>
-<pre><code class="xml">&lt;build&gt;
-    &lt;plugins&gt;
-        &lt;plugin&gt;
-            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-            &lt;artifactId&gt;spring-boot-maven-plugin&lt;/artifactId&gt;
-        &lt;/plugin&gt;
-    &lt;/plugins&gt;
-&lt;/build&gt;</code></pre>
-<p>2.然后再点击右侧的Maven进行打包</p>
-<p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/1.png" srcset="/img/loading.gif" alt="1"></p>
-<p>3.打包完成后，找到打包后文件所在目录</p>
-<p>打开项目所在目录 —&gt; target文件夹 —&gt; 找到jar结尾的文件<img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/2.png" srcset="/img/loading.gif" alt="2"></p>
-<p>4.测试在本地是否能够正常运行</p>
-<p>在target文件夹下打开cmd，输入命令</p>
-<pre><code class="cmd">java -jar 打包文件的名称</code></pre>
-<h2 id="部署mysql"><a href="#部署mysql" class="headerlink" title="部署mysql"></a>部署mysql</h2><p>详情请参考另一篇文章：<a href="http://localhost:4000/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/" target="_blank" rel="noopener">阿里云部署mysql</a></p>
-<h2 id="部署JDK"><a href="#部署JDK" class="headerlink" title="部署JDK"></a>部署JDK</h2><p>详情请参考另一篇文章：<a href="http://localhost:4000/2020/04/08/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2JDK8/" target="_blank" rel="noopener">阿里云服务器部署JDK8</a></p>
-<h2 id="上传项目"><a href="#上传项目" class="headerlink" title="上传项目"></a>上传项目</h2><p>将上面打包好的项目通过Xftp工具上传到服务器opt目录</p>
-<p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/3.png" srcset="/img/loading.gif" alt="1"></p>
-<h2 id="运行项目"><a href="#运行项目" class="headerlink" title="运行项目"></a>运行项目</h2><pre><code>java -jar 项目的jar文件</code></pre><p><strong>通过浏览器进行访问，如果访问不了，应该是没有开放相应的端口，通过阿里云的安全组实例打开相应的端口号</strong></p>
-<p><img src="/img/article/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/4.png" srcset="/img/loading.gif" alt="1"></p>
-<p>至此，阿里云服务器部署后端项目成功！！！</p>
+              <h4 id="转载"><a href="#转载" class="headerlink" title="转载"></a>转载</h4><p><strong>转载自<a href="https://blog.csdn.net/u012702547/article/details/88775298" target="_blank" rel="noopener">https://blog.csdn.net/u012702547/article/details/88775298</a></strong></p>
+<h4 id="1-工程创建"><a href="#1-工程创建" class="headerlink" title="1.工程创建"></a>1.工程创建</h4><p>导入依赖</p>
+<pre><code class="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger2&lt;/artifactId&gt;
+    &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;io.springfox&lt;/groupId&gt;
+    &lt;artifactId&gt;springfox-swagger-ui&lt;/artifactId&gt;
+    &lt;version&gt;2.9.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;
+&lt;/dependency&gt;</code></pre>
+<h4 id="2-Swagger2配置"><a href="#2-Swagger2配置" class="headerlink" title="2.Swagger2配置"></a>2.Swagger2配置</h4><p>Swagger2的配置也是比较容易的，在项目创建成功之后，只需要开发者自己提供一个Docket的Bean即可，如下：</p>
+<pre><code>@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+    @Bean
+    public Docket createRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .pathMapping(&quot;/&quot;)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage(&quot;com.nvn.controller&quot;))
+                .paths(PathSelectors.any())
+                .build().apiInfo(new ApiInfoBuilder()
+                        //标题
+                        .title(&quot;SpringBoot整合Swagger&quot;)
+                        //描述
+                        .description(&quot;SpringBoot整合Swagger，详细信息......&quot;)
+                        //版本
+                        .version(&quot;9.0&quot;)
+                        .contact(new Contact(&quot;啊啊啊啊&quot;,&quot;blog.csdn.net&quot;,&quot;aaa@gmail.com&quot;))
+                        //网页
+                        .license(&quot;The Apache License&quot;)
+                        .licenseUrl(&quot;http://www.baidu.com&quot;)
+                        .build());
+    }
+}</code></pre><p>这里提供一个配置类，首先通过@EnableSwagger2注解启用Swagger2，然后配置一个Docket Bean，这个Bean中，配置映射路径和要扫描的接口的位置，在apiInfo中，主要配置一下Swagger2文档网站的信息，例如网站的title，网站的描述，联系人的信息，使用的协议等等。</p>
+<h4 id="3-创建接口"><a href="#3-创建接口" class="headerlink" title="3.创建接口"></a>3.创建接口</h4><p>接下来就是创建接口了，Swagger2相关的注解其实并不多，而且很容易懂，下面我来分别向小伙伴们举例说明：</p>
+<pre><code class="java">@PostMapping(&quot;/&quot;)
+    @ApiOperation(&quot;添加用户的接口&quot;)
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = &quot;username&quot;, value = &quot;用户名&quot;, defaultValue = &quot;李四&quot;),
+            @ApiImplicitParam(name = &quot;address&quot;, value = &quot;用户地址&quot;, defaultValue = &quot;深圳&quot;, required = true)
+    }
+    )
+    public RespBean addUser(String username, @RequestParam(required = true) String address) {
+        return new RespBean();
+    }</code></pre>
+<p>这里边涉及到多个API，我来向小伙伴们分别说明：</p>
+<p>1.@Api注解可以用来标记当前Controller的功能。<br>2.@ApiOperation注解用来标记一个方法的作用。<br>3.@ApiImplicitParam注解用来描述一个参数，可以配置参数的中文含义，也可以给参数设置默认值，这样在接口测试的时候可以避免手动输入。<br>如果有多个参数，则需要使用多个@ApiImplicitParam注解来描述，多个@ApiImplicitParam注解需要放在一个@ApiImplicitParams注解中。<br>需要注意的是，@ApiImplicitParam注解中虽然可以指定参数是必填的，但是却不能代替5.@RequestParam(required = true)，前者的必填只是在Swagger2框架内必填，抛弃了Swagger2，这个限制就没用了，所以假如开发者需要指定一个参数必填，@RequestParam(required = true)注解还是不能省略。<br>6.如果参数是一个对象（例如上文的更新接口），对于参数的描述也可以放在实体类中。例如下面一段代码：</p>
+<pre><code>@ApiModel
+public class User {
+    @ApiModelProperty(value = &quot;用户id&quot;)
+    private Integer id;
+    @ApiModelProperty(value = &quot;用户名&quot;)
+    private String username;
+    @ApiModelProperty(value = &quot;用户地址&quot;)
+    private String address;
+    //getter/setter
+}</code></pre><h4 id="4-访问"><a href="#4-访问" class="headerlink" title="4.访问"></a>4.访问</h4><p><a href="http://localhost:8080/swagger-ui.html" target="_blank" rel="noopener">http://localhost:8080/swagger-ui.html</a></p>
+<h4 id="5-出现的问题"><a href="#5-出现的问题" class="headerlink" title="5.出现的问题"></a>5.出现的问题</h4><p>1.SpringBoot2.x添加拦截器后Swagger无法访问</p>
+<p><a href="https://blog.csdn.net/Strugglein/article/details/82755039" target="_blank" rel="noopener">https://blog.csdn.net/Strugglein/article/details/82755039</a></p>
+<h4 id="6-swagger2注解详细说明"><a href="#6-swagger2注解详细说明" class="headerlink" title="6.swagger2注解详细说明"></a>6.swagger2注解详细说明</h4><p><a href="https://blog.csdn.net/qq_28009065/article/details/79104103" target="_blank" rel="noopener">https://blog.csdn.net/qq_28009065/article/details/79104103</a></p>
 
             </div>
             <hr>
@@ -202,7 +245,7 @@
                   <span>
                 <i class="iconfont icon-inbox"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2/">服务器部署</a>
+                      <a class="hover-with-bg" href="/categories/swagger/">swagger</a>
                       &nbsp;
                     
                   </span>&nbsp;&nbsp;
@@ -211,15 +254,9 @@
                   <span>
                 <i class="iconfont icon-tag"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E9%98%BF%E9%87%8C%E4%BA%91/">阿里云</a>
+                      <a class="hover-with-bg" href="/tags/Springboot/">Springboot</a>
                     
-                      <a class="hover-with-bg" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</a>
-                    
-                      <a class="hover-with-bg" href="/tags/mysql/">mysql</a>
-                    
-                      <a class="hover-with-bg" href="/tags/%E9%83%A8%E7%BD%B2%E5%90%8E%E7%AB%AF%E9%A1%B9%E7%9B%AE/">部署后端项目</a>
-                    
-                      <a class="hover-with-bg" href="/tags/JDK/">JDK</a>
+                      <a class="hover-with-bg" href="/tags/swagger/">swagger</a>
                     
                   </span>
                 
@@ -231,16 +268,11 @@
                 <div class="post-prevnext row">
                   <div class="post-prev col-12 col-md-6">
                     
-                      <a href="/2020/03/31/%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2mysql/">
-                        <i class="fa fa-chevron-left"></i>
-                        <span>阿里云服务器部署mysql5.7.2版本</span>
-                      </a>
-                    
                   </div>
                   <div class="post-next col-12 col-md-6">
                     
-                      <a href="/2020/03/12/%E5%88%A9%E7%94%A8hexo%E5%88%9B%E5%BB%BA%E5%8D%9A%E5%AE%A2/">
-                        <span>利用hexo创建博客</span>
+                      <a href="/2020/04/11/CMD%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/">
+                        <span>CMD常用命令</span>
                         <i class="fa fa-chevron-right"></i>
                       </a>
                     
@@ -411,7 +443,7 @@
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "阿里云服务器部署后端项目&nbsp;",
+        "Springboot整合swagger&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
