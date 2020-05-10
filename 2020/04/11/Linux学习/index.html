@@ -17,7 +17,7 @@
   <meta name="description" content="">
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
-  <title>Linux常用命令 - exhibition666</title>
+  <title>Linux学习 - exhibition666</title>
 
   <link  rel="stylesheet" href="https://cdn.staticfile.org/font-awesome/5.12.1/css/all.min.css" />
 <link  rel="stylesheet" href="https://cdn.staticfile.org/twitter-bootstrap/4.4.1/css/bootstrap.min.css" />
@@ -133,7 +133,7 @@
                   
                   <span class="post-meta">
                     <i class="far fa-chart-bar"></i>
-                    814 字
+                    1.8k 字
                   </span>
                 
 
@@ -141,7 +141,7 @@
                   
                   <span class="post-meta">
                       <i class="far fa-clock"></i>
-                      2 分钟
+                      6 分钟
                   </span>
                 
 
@@ -221,7 +221,78 @@ cat [选项] 查看的文件
     -n: 显示行号
 
 //分页显示
-cat 文件名 | more[分页浏览]</code></pre><h4 id="more"><a href="#more" class="headerlink" title="more"></a>more</h4><pre><code></code></pre>
+cat 文件名 | more[分页浏览]</code></pre><h4 id="more"><a href="#more" class="headerlink" title="more"></a>more</h4><pre><code>//以全屏幕的方式按页显示文本文件的内容
+more 要查看的文件</code></pre><h4 id="less"><a href="#less" class="headerlink" title="less"></a>less</h4><pre><code>//分屏查看文件内容，对于显示大型文件具有较高的效率
+less 要查看的文件</code></pre><h4 id="‘-gt-’-指令和-‘-gt-gt-’-指令"><a href="#‘-gt-’-指令和-‘-gt-gt-’-指令" class="headerlink" title="‘&gt;’ 指令和 ‘&gt;&gt;’ 指令"></a>‘&gt;’ 指令和 ‘&gt;&gt;’ 指令</h4><pre><code>&gt;指令：输出重定向，会将原来的文件的内容覆盖
+&gt;&gt;指令：追加，不会覆盖原来文件的内容，追加到文件尾部
+
+ls -l &gt; a.txt
+ls -al &gt;&gt; a.txt
+cat 文件1 &gt; 文件2（将文件1的内容覆盖到文件2）
+echo &quot;内容&quot; &gt;&gt; 文件
+cal &gt;&gt; 文件</code></pre><h4 id="echo"><a href="#echo" class="headerlink" title="echo"></a>echo</h4><pre><code>//输出内容到控制台
+echo [选项] [输出内容]
+
+echo $PATH(输出当前的环境变量)</code></pre><h4 id="head"><a href="#head" class="headerlink" title="head"></a>head</h4><pre><code>//显示文件开头部分内容，默认显示前10行内容
+head 文件 (查看文件前10行)
+head -n 5 文件 (查看文件前5行)</code></pre><h4 id="tail"><a href="#tail" class="headerlink" title="tail"></a>tail</h4><pre><code>//显示文件后10行内容
+tail 文件 (查看文件后10行内容)
+tail -n 5 文件 (查看文件后5行内容)
+tail -f 文件 (实时追踪该文档的所有更新，工作经常使用)</code></pre><h4 id="ln"><a href="#ln" class="headerlink" title="ln"></a>ln</h4><pre><code>//软连接也叫符号连接，类似于windows里的快捷方式，主要存放了链接其他文件的路径
+ln -s [原文件或目录][软链接名] (给原文件创建一个软连接)</code></pre><h4 id="history"><a href="#history" class="headerlink" title="history"></a>history</h4><pre><code>//查看已经执行过的历史命令，也可以执行历史命令
+history (查看已经执行过的历史命令)</code></pre><h3 id="时间日期类"><a href="#时间日期类" class="headerlink" title="时间日期类"></a>时间日期类</h3><h4 id="date"><a href="#date" class="headerlink" title="date"></a>date</h4><pre><code>//显示当前日期
+date (显示当前时间)
+date &quot;+%Y&quot; (显示当前年份)
+date &quot;+%m&quot; (显示当前月份)
+date &quot;+%d&quot; (显示当前是哪一天)
+date &quot;+%Y-%m-%d %H:%M:%s&quot; (显示年月日时分秒)
+
+
+//设置日期
+date -s 字符串时间 (设置系统当前时间)
+date -s &quot;2018-10-10 11:22:22&quot;</code></pre><h4 id="cal"><a href="#cal" class="headerlink" title="cal"></a>cal</h4><pre><code>//查看日历指令
+cal [选项] (不加选项，显示本月月历)</code></pre><h3 id="搜索查找类"><a href="#搜索查找类" class="headerlink" title="搜索查找类"></a>搜索查找类</h3><h4 id="find"><a href="#find" class="headerlink" title="find"></a>find</h4><pre><code>//从指定目录向下递归地便利其各个子目录，将满足条件的文件或者目录显示在终端
+find [搜索范围] [选项]
+
+常用选项
+选项                 功能
+-name&lt;查询方式&gt;       按照指定的文件名查找模式查找文件
+-user&lt;用户名&gt;         查找属于指定用户名所有文件
+-size&lt;文件大小&gt;       按照指定的文件大小查找文件</code></pre><h4 id="locate"><a href="#locate" class="headerlink" title="locate"></a>locate</h4><pre><code>//快速定位文件路径
+locate 搜索文件
+
+由于locate指令基于数据库进行查询，所以第一次运行前，必须使用updatedb指令创建locate数据库</code></pre><h4 id="grep-和-管道符号"><a href="#grep-和-管道符号" class="headerlink" title="grep 和 管道符号|"></a>grep 和 管道符号|</h4><pre><code>//grep 过滤查找，管道符，&quot;|&quot;, 表示将前一个命令的处理结果输出传递给后面的命令处理
+grep [选项] 查找内容 源文件
+
+常用选项
+选项      功能
+-n        显示匹配行及行号
+-i        忽略字母大小写
+
+例子
+在hello.txt文件中，查找&quot;yes&quot;所在行，并显示行号
+cat hello.text | grep -n yes</code></pre><h3 id="压缩和解压类"><a href="#压缩和解压类" class="headerlink" title="压缩和解压类"></a>压缩和解压类</h3><h4 id="gzip-gunzip"><a href="#gzip-gunzip" class="headerlink" title="gzip/gunzip"></a>gzip/gunzip</h4><pre><code>//gzip 压缩文件
+//gunzip 解压文件
+gzip 文件 (压缩文件，只能将文件压缩为*.gz文件)
+gunzip 文件.gz (解压缩文件命令)
+
+//当我们使用gzip对文件进行压缩后，不会保留原来的文件</code></pre><h4 id="zip-unzip"><a href="#zip-unzip" class="headerlink" title="zip/unzip"></a>zip/unzip</h4><pre><code>//zip 压缩文件
+//unzip 解压文件，这个在项目打包发布中很有用
+zip [选项] XXX.zip 要压缩的内容 (压缩文件和目录的命令)
+unzip [选项] XXX.zip (解压缩文件)
+
+zip常用选项
+-r: 递归压缩，即压缩目录
+
+unzip常用选项
+-d&lt;目录&gt;: 指定解压后文件的存放目录</code></pre><h4 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h4><pre><code>//打包指令，最后打包的文件是 .tar.gz 的文件
+tar [选项] XXX.tar.gz 打包的内容 (打包目录，压缩后的文件格式 .tar.gz)
+常用选项
+-c: 产生.tar打包文件
+-v: 显示详细信息
+-f: 指定压缩后的文件名
+-z: 打包同时压缩
+-x: 解包.tar文件</code></pre>
             </div>
             <hr>
             <div>
@@ -431,7 +502,7 @@ cat 文件名 | more[分页浏览]</code></pre><h4 id="more"><a href="#more" cla
     var typed = new Typed('#subtitle', {
       strings: [
         '  ',
-        "Linux常用命令&nbsp;",
+        "Linux学习&nbsp;",
       ],
       cursorChar: "_",
       typeSpeed: 70,
